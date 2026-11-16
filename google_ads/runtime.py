@@ -5,6 +5,7 @@ from .contracts import validate
 from .accounts import get_account, verify_identity
 from .errors import AdsError
 from .transport import PinnedTransport
+from .reads import READS, handle_read
 
 
 def dispatch(payload: dict, *, transport=None) -> dict:
@@ -27,6 +28,8 @@ def dispatch(payload: dict, *, transport=None) -> dict:
             result = verify_identity(ctx, send)
         elif ctx.operation in {"get_account", "bind_ads_account"}:
             result = get_account(ctx, send)
+        elif ctx.operation in READS:
+            result = handle_read(ctx, send)
         else:
             raise AdsError(
                 "unsupported_configuration",

@@ -38,7 +38,7 @@ def call(ctx: Context, send, path: str, body=None, *, customer: str | None = Non
     return reply
 
 
-def get_account(ctx: Context, send) -> dict:
+def get_account(ctx: Context, send, *, allow_manager: bool = False) -> dict:
     fields = "customer.id, customer.resource_name, customer.descriptive_name, customer.manager, customer.test_account, customer.status, customer.currency_code, customer.time_zone, customer.contains_eu_political_advertising"
     reply = call(
         ctx,
@@ -62,7 +62,7 @@ def get_account(ctx: Context, send) -> dict:
     if (
         str(c.get("id")) != ctx.customer
         or c.get("resourceName") != f"customers/{ctx.customer}"
-        or c.get("manager", False)
+        or (c.get("manager", False) and not allow_manager)
     ):
         raise AdsError(
             "account_access_lost", "A directly accessible advertising customer is required."

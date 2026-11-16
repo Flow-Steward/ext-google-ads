@@ -4,12 +4,21 @@ from __future__ import annotations
 
 
 class AdsError(Exception):
-    def __init__(self, code: str, message: str, *, retryable: bool = False, unknown: bool = False):
+    def __init__(
+        self,
+        code: str,
+        message: str,
+        *,
+        retryable: bool = False,
+        unknown: bool = False,
+        restart: bool = False,
+    ):
         super().__init__(message)
         self.code = code
         self.message = message
         self.retryable = retryable and not unknown
         self.unknown = unknown
+        self.restart = restart
 
     def envelope(self) -> dict:
         value = {
@@ -24,4 +33,6 @@ class AdsError(Exception):
             value.update(
                 external_effect_status="timeout_unknown", definitely_no_external_effect=False
             )
+        if self.restart:
+            value["restart_required"] = True
         return value

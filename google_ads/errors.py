@@ -12,6 +12,7 @@ class AdsError(Exception):
         retryable: bool = False,
         unknown: bool = False,
         restart: bool = False,
+        no_effect: bool = False,
     ):
         super().__init__(message)
         self.code = code
@@ -19,6 +20,7 @@ class AdsError(Exception):
         self.retryable = retryable and not unknown
         self.unknown = unknown
         self.restart = restart
+        self.no_effect = no_effect
 
     def envelope(self) -> dict:
         value = {
@@ -33,6 +35,8 @@ class AdsError(Exception):
             value.update(
                 external_effect_status="timeout_unknown", definitely_no_external_effect=False
             )
+        if self.no_effect:
+            value["definitely_no_external_effect"] = True
         if self.restart:
             value["restart_required"] = True
         return value

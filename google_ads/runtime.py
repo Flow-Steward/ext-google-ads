@@ -6,6 +6,7 @@ from .accounts import get_account, verify_identity
 from .errors import AdsError
 from .transport import PinnedTransport
 from .reads import READS, handle_read
+from .search_create import execute as search_create
 
 
 def dispatch(payload: dict, *, transport=None) -> dict:
@@ -28,6 +29,8 @@ def dispatch(payload: dict, *, transport=None) -> dict:
             result = verify_identity(ctx, send)
         elif ctx.operation in {"get_account", "bind_ads_account"}:
             result = get_account(ctx, send)
+        elif ctx.operation in {"create_search_campaign", "validate_search_campaign"}:
+            result = search_create(ctx, send)
         elif ctx.operation in READS:
             result = handle_read(ctx, send)
         else:
@@ -36,9 +39,26 @@ def dispatch(payload: dict, *, transport=None) -> dict:
                 "This operation is not implemented in the current development checkout.",
             )
         validate("results", ctx.operation, result)
-        return {"ok": True, "result": result}
+        response = {"ok": True, "result": result}
+        if ctx.operation in WRITES:
+            response.update(external_effect_status="succeeded", definitely_no_external_effect=False)
+        return response
     except AdsError as error:
-        return error.envelope()
+        if (
+            ctx is not None
+            and ctx.effect_status != "not_sent"
+            and not error.unknown
+            and not error.no_effect
+        ):
+            return AdsError(
+                "outcome_unknown",
+                "The write result needs reconciliation; do not retry automatically.",
+                unknown=True,
+            ).envelope()
+        response = error.envelope()
+        if ctx is None or ctx.effect_status == "not_sent":
+            response["definitely_no_external_effect"] = True
+        return response
     except Exception:
         unknown = ctx is not None and ctx.effect_status != "not_sent"
         return AdsError(

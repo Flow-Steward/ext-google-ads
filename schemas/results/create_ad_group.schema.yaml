@@ -1,0 +1,65 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  request_id:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 255
+  mutation_operation_count:
+    type: integer
+    minimum: 0
+    maximum: 10000
+  ad_group_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+  campaign_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  name:
+    type: string
+    minLength: 1
+    maxLength: 255
+  status:
+    type: string
+    const: PAUSED
+  cpc_bid_micros:
+    type: string
+    minLength: 1
+    maxLength: 19
+    pattern: ^[1-9][0-9]{0,18}$
+    description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+  currency_code:
+    type: string
+    minLength: 3
+    maxLength: 3
+    pattern: ^[A-Z]{3}$
+required:
+- customer_id
+- connection_id
+- api_version
+- request_id
+- mutation_operation_count
+- ad_group_resource_name
+- campaign_resource_name
+- name
+- status
+- currency_code

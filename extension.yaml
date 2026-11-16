@@ -1,0 +1,136 @@
+manifest_version: 2
+lifecycle:
+  data_schema_version: 1
+  data_migrations: []
+extension_id: flowsteward.google-ads
+kind: tool_provider
+version: 1.0.0
+runtime:
+  contract_version: extension_host_v2
+  compatibility:
+    platform_min: 1.9.0
+  extension_contract_v2:
+    oauth_providers: contracts/oauth_providers.yaml
+    connection_types: contracts/connection_types.yaml
+    operation_manifest: contracts/operation_manifest.yaml
+    step_ui_manifest: contracts/step_ui_manifest.yaml
+display_name: Google Ads
+description: Search advertising across project connections.
+vendor:
+  name: Flow Steward
+listing:
+  category: marketing
+  tags:
+  - google
+  - advertising
+  - search
+  - agencies
+  summary: Search advertising across project connections.
+features:
+- tool
+- action
+event_subscriptions: []
+required_scopes:
+- extension:invoke
+schemas:
+  config: schemas/config.schema.yaml
+  secrets: schemas/secrets.schema.yaml
+  subscriptions: schemas/subscriptions.schema.yaml
+entrypoint:
+  mode: subprocess
+  command:
+  - python3
+  - main.py
+  timeout_policy:
+    env: FS_EXTENSION_OPERATION_TIMEOUT_SECONDS
+    default_seconds: 300
+    minimum_seconds: 30
+    maximum_seconds: 3600
+    headroom_seconds: 30
+health:
+  command:
+  - python3
+  - health.py
+  timeout_seconds: 5
+ui_manifest: ui/ui_manifest.yaml
+action_manifest: ui/actions/actions.yaml
+python_requirements: []
+account_scope:
+  scope_type: project
+  description: One project-scoped OAuth connection per customer/MCC route.
+external_effects:
+- operation_id: create_search_campaign
+  effect_kind: google_ads_create_search_campaign
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: update_campaign
+  effect_kind: google_ads_update_campaign
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: update_campaign_budget
+  effect_kind: google_ads_update_campaign_budget
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: update_bidding
+  effect_kind: google_ads_update_bidding
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: create_ad_group
+  effect_kind: google_ads_create_ad_group
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: update_ad_group
+  effect_kind: google_ads_update_ad_group
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: create_responsive_search_ad
+  effect_kind: google_ads_create_responsive_search_ad
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: update_responsive_search_ad
+  effect_kind: google_ads_update_responsive_search_ad
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: set_delivery_status
+  effect_kind: google_ads_set_delivery_status
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: upsert_keywords
+  effect_kind: google_ads_upsert_keywords
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: remove_keywords
+  effect_kind: google_ads_remove_keywords
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: upsert_negative_keywords
+  effect_kind: google_ads_upsert_negative_keywords
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+- operation_id: set_campaign_targeting
+  effect_kind: google_ads_set_campaign_targeting
+  channel: google_ads
+  idempotency: required
+  test_mode_behavior: suppress
+callbacks:
+- callback_id: oauth_authorization
+  purpose: oauth_authorization
+  methods:
+  - GET
+  connection_scoped: false
+egress:
+  hosts:
+  - googleads.googleapis.com
+  - openidconnect.googleapis.com

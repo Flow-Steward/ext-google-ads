@@ -1,0 +1,474 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        customer_id:
+          type: string
+          minLength: 10
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        connection_id:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^conn_[A-Za-z0-9_-]+$
+        api_version:
+          type: string
+          const: v26
+        request_id:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+        mutation_operation_count:
+          type: integer
+          minimum: 0
+          maximum: 10000
+        campaign_resource_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+        previous:
+          type: object
+          additionalProperties: false
+          properties:
+            geo_target_constants:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 128
+                pattern: ^geoTargetConstants/[0-9]+$
+              minItems: 1
+              maxItems: 1000
+            location_options:
+              type: object
+              additionalProperties: false
+              properties:
+                positive_geo_target_type:
+                  type: string
+                  enum:
+                  - PRESENCE
+                  - PRESENCE_OR_INTEREST
+                negative_geo_target_type:
+                  type: string
+                  enum:
+                  - PRESENCE
+              required:
+              - positive_geo_target_type
+              - negative_geo_target_type
+            schedule:
+              type: object
+              additionalProperties: false
+              properties:
+                mode:
+                  type: string
+                  enum:
+                  - all_time
+                  - weekly
+                intervals:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      day:
+                        type: string
+                        enum:
+                        - MONDAY
+                        - TUESDAY
+                        - WEDNESDAY
+                        - THURSDAY
+                        - FRIDAY
+                        - SATURDAY
+                        - SUNDAY
+                      start_hour:
+                        type: integer
+                        minimum: 0
+                        maximum: 23
+                      start_minute:
+                        type: integer
+                        enum:
+                        - 0
+                        - 15
+                        - 30
+                        - 45
+                      end_hour:
+                        type: integer
+                        minimum: 0
+                        maximum: 24
+                      end_minute:
+                        type: integer
+                        enum:
+                        - 0
+                        - 15
+                        - 30
+                        - 45
+                    required:
+                    - day
+                    - start_hour
+                    - start_minute
+                    - end_hour
+                    - end_minute
+                  minItems: 1
+                  maxItems: 42
+              required:
+              - mode
+              allOf:
+              - if:
+                  properties:
+                    mode:
+                      const: weekly
+                then:
+                  required:
+                  - intervals
+              - if:
+                  properties:
+                    mode:
+                      const: all_time
+                then:
+                  not:
+                    required:
+                    - intervals
+          required: []
+          anyOf:
+          - required:
+            - geo_target_constants
+          - required:
+            - location_options
+          - required:
+            - schedule
+        current:
+          type: object
+          additionalProperties: false
+          properties:
+            geo_target_constants:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 128
+                pattern: ^geoTargetConstants/[0-9]+$
+              minItems: 1
+              maxItems: 1000
+            location_options:
+              type: object
+              additionalProperties: false
+              properties:
+                positive_geo_target_type:
+                  type: string
+                  enum:
+                  - PRESENCE
+                  - PRESENCE_OR_INTEREST
+                negative_geo_target_type:
+                  type: string
+                  enum:
+                  - PRESENCE
+              required:
+              - positive_geo_target_type
+              - negative_geo_target_type
+            schedule:
+              type: object
+              additionalProperties: false
+              properties:
+                mode:
+                  type: string
+                  enum:
+                  - all_time
+                  - weekly
+                intervals:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      day:
+                        type: string
+                        enum:
+                        - MONDAY
+                        - TUESDAY
+                        - WEDNESDAY
+                        - THURSDAY
+                        - FRIDAY
+                        - SATURDAY
+                        - SUNDAY
+                      start_hour:
+                        type: integer
+                        minimum: 0
+                        maximum: 23
+                      start_minute:
+                        type: integer
+                        enum:
+                        - 0
+                        - 15
+                        - 30
+                        - 45
+                      end_hour:
+                        type: integer
+                        minimum: 0
+                        maximum: 24
+                      end_minute:
+                        type: integer
+                        enum:
+                        - 0
+                        - 15
+                        - 30
+                        - 45
+                    required:
+                    - day
+                    - start_hour
+                    - start_minute
+                    - end_hour
+                    - end_minute
+                  minItems: 1
+                  maxItems: 42
+              required:
+              - mode
+              allOf:
+              - if:
+                  properties:
+                    mode:
+                      const: weekly
+                then:
+                  required:
+                  - intervals
+              - if:
+                  properties:
+                    mode:
+                      const: all_time
+                then:
+                  not:
+                    required:
+                    - intervals
+          required: []
+          anyOf:
+          - required:
+            - geo_target_constants
+          - required:
+            - location_options
+          - required:
+            - schedule
+        changes:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              family:
+                type: string
+                enum:
+                - GEO
+                - LOCATION_OPTIONS
+                - SCHEDULE
+              action:
+                type: string
+                enum:
+                - ADD
+                - REMOVE
+                - UPDATE
+              resource_name:
+                anyOf:
+                - type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroupCriteria/[0-9]+~[0-9]+$
+                - type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaignCriteria/[0-9]+~[0-9]+$
+              field_mask:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - geo_target_type_setting.positive_geo_target_type
+                  - geo_target_type_setting.negative_geo_target_type
+                minItems: 0
+                maxItems: 2
+            required:
+            - family
+            - action
+            - field_mask
+          minItems: 0
+          maxItems: 10000
+        account_time_zone:
+          type: string
+          minLength: 1
+          maxLength: 128
+        preflight_is_provider_cas:
+          type: boolean
+          const: false
+      required:
+      - customer_id
+      - connection_id
+      - api_version
+      - request_id
+      - mutation_operation_count
+      - campaign_resource_name
+      - previous
+      - current
+      - changes
+      - account_time_zone
+      - preflight_is_provider_cas
+    external_effect_status:
+      type: string
+      const: succeeded
+    definitely_no_external_effect:
+      type: boolean
+      const: false
+  required:
+  - ok
+  - result
+  - external_effect_status
+  - definitely_no_external_effect
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: false
+    result:
+      type: object
+      additionalProperties: false
+      properties: {}
+      required: []
+    error_code:
+      type: string
+      enum:
+      - invalid_payload
+      - invalid_host_envelope
+      - invalid_connection
+      - authorization_required
+      - permission_denied
+      - account_not_bound
+      - account_access_lost
+      - production_access_required
+      - resource_not_found
+      - resource_account_mismatch
+      - unsupported_configuration
+      - validation_failed
+      - policy_violation
+      - state_conflict
+      - rate_limited
+      - quota_exceeded
+      - provider_unavailable
+      - timeout
+      - outcome_unknown
+      - internal_error
+      - external_effect_claim_required
+    error:
+      type: string
+      minLength: 1
+      maxLength: 2048
+    errors:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          code:
+            type: string
+            enum:
+            - invalid_payload
+            - invalid_host_envelope
+            - invalid_connection
+            - authorization_required
+            - permission_denied
+            - account_not_bound
+            - account_access_lost
+            - production_access_required
+            - resource_not_found
+            - resource_account_mismatch
+            - unsupported_configuration
+            - validation_failed
+            - policy_violation
+            - state_conflict
+            - rate_limited
+            - quota_exceeded
+            - provider_unavailable
+            - timeout
+            - outcome_unknown
+            - internal_error
+            - external_effect_claim_required
+          message:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          field_path:
+            type: string
+            minLength: 0
+            maxLength: 512
+        required:
+        - code
+        - message
+      minItems: 1
+      maxItems: 100
+    retryable:
+      type: boolean
+    request_id:
+      type: string
+      minLength: 1
+      maxLength: 255
+    provider_error_code:
+      type: string
+      minLength: 1
+      maxLength: 255
+    restart_required:
+      type: boolean
+    external_effect_status:
+      type: string
+      enum:
+      - failed
+      - timeout_unknown
+    definitely_no_external_effect:
+      type: boolean
+  required:
+  - ok
+  - result
+  - error_code
+  - error
+  - errors
+  - retryable
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        test_mode_status:
+          type: string
+          const: suppressed
+        external_effect_status:
+          type: string
+          const: suppressed
+        definitely_no_external_effect:
+          type: boolean
+          const: true
+      required:
+      - test_mode_status
+      - external_effect_status
+      - definitely_no_external_effect
+    external_effect_status:
+      type: string
+      const: suppressed
+    definitely_no_external_effect:
+      type: boolean
+      const: true
+  required:
+  - ok
+  - result
+  - external_effect_status
+  - definitely_no_external_effect

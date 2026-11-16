@@ -1,0 +1,1332 @@
+actions:
+- action_id: verify_google_identity
+  title: Verify google identity
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: false
+  parameters: []
+  result_fields:
+  - result.subject
+  - result.verified_display_name
+  - result.verified_email
+  - result.safe_metadata
+  - result.health
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_accessible_accounts
+  title: List accessible accounts
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: false
+  parameters:
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_manager_clients
+  title: List manager clients
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: false
+  parameters:
+  - name: manager_id
+    type: string
+    required: true
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  - result.manager_id
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: bind_ads_account
+  title: Bind ads account
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: false
+  parameters: []
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.account
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: get_account
+  title: Get account
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters: []
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.account
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_campaigns
+  title: List campaigns
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: statuses
+    type: array
+    required: false
+  - name: advertising_channel_types
+    type: array
+    required: false
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: get_campaign
+  title: Get campaign
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: campaign
+    type: string
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.currency_code
+  - result.time_zone
+  - result.campaign
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_ad_groups
+  title: List ad groups
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: campaign
+    type: string
+    required: true
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  - result.currency_code
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_ads
+  title: List ads
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: campaign
+    type: string
+    required: false
+  - name: ad_group
+    type: string
+    required: false
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_keywords
+  title: List keywords
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: campaign
+    type: string
+    required: false
+  - name: ad_group
+    type: string
+    required: false
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  - result.currency_code
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: list_targeting
+  title: List targeting
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: campaign
+    type: string
+    required: true
+  - name: page_size
+    type: integer
+    required: false
+  - name: cursor
+    type: string
+    required: false
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.items
+  - result.next_cursor
+  - result.truncated
+  - result.campaign
+  - result.location_options
+  - result.network_settings
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: validate_search_campaign
+  title: Validate search campaign
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: specification
+    type: object
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.valid
+  - result.expanded_operation_count
+  - result.warnings
+  - result.request_id
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: create_search_campaign
+  title: Create search campaign
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: specification
+    type: object
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.currency_code
+  - result.campaign_resource_name
+  - result.status
+  - result.explicitly_shared
+  - result.resource_mapping
+  - result.expanded_operation_count
+  - result.request_id
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: update_campaign
+  title: Update campaign
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: campaign_resource_name
+    type: string
+    required: true
+  - name: patch
+    type: object
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.campaign_resource_name
+  - result.applied_patch
+  - result.update_mask
+  - result.status
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: update_campaign_budget
+  title: Update campaign budget
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: campaign_resource_name
+    type: string
+    required: true
+  - name: amount_micros
+    type: string
+    required: true
+  - name: currency_code
+    type: string
+    required: true
+  - name: expected_current_amount_micros
+    type: string
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.campaign_resource_name
+  - result.budget_resource_name
+  - result.previous_amount_micros
+  - result.amount_micros
+  - result.currency_code
+  - result.explicitly_shared
+  - result.period
+  - result.affected_campaign_resource_names
+  - result.update_mask
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: update_bidding
+  title: Update bidding
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: campaign_resource_name
+    type: string
+    required: true
+  - name: bidding
+    type: object
+    required: true
+  - name: expected_current_strategy
+    type: string
+    required: true
+  - name: currency_code
+    type: string
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.campaign_resource_name
+  - result.previous_strategy
+  - result.bidding
+  - result.currency_code
+  - result.update_mask
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: create_ad_group
+  title: Create ad group
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: campaign_resource_name
+    type: string
+    required: true
+  - name: name
+    type: string
+    required: true
+  - name: cpc_bid_micros
+    type: string
+    required: false
+  - name: currency_code
+    type: string
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.ad_group_resource_name
+  - result.campaign_resource_name
+  - result.name
+  - result.status
+  - result.cpc_bid_micros
+  - result.currency_code
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: update_ad_group
+  title: Update ad group
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: ad_group_resource_name
+    type: string
+    required: true
+  - name: patch
+    type: object
+    required: true
+  - name: currency_code
+    type: string
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.ad_group_resource_name
+  - result.campaign_resource_name
+  - result.name
+  - result.status
+  - result.cpc_bid_micros
+  - result.currency_code
+  - result.update_mask
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: create_responsive_search_ad
+  title: Create responsive search ad
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: ad_group_resource_name
+    type: string
+    required: true
+  - name: responsive_search_ad
+    type: object
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.ad_resource_name
+  - result.ad_group_ad_resource_name
+  - result.ad_group_resource_name
+  - result.campaign_resource_name
+  - result.responsive_search_ad
+  - result.status
+  - result.policy
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: update_responsive_search_ad
+  title: Update responsive search ad
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: ad_resource_name
+    type: string
+    required: true
+  - name: patch
+    type: object
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.ad_resource_name
+  - result.ad_group_ad_resource_name
+  - result.ad_group_resource_name
+  - result.campaign_resource_name
+  - result.responsive_search_ad
+  - result.status
+  - result.policy
+  - result.update_mask
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: set_delivery_status
+  title: Set delivery status
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: resource_type
+    type: string
+    required: true
+  - name: resource_name
+    type: string
+    required: true
+  - name: status
+    type: string
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.resource_type
+  - result.resource_name
+  - result.previous_status
+  - result.status
+  - result.update_mask
+  - result.serving_guaranteed
+  - result.delivery_notes
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: upsert_keywords
+  title: Upsert keywords
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: ad_group_resource_name
+    type: string
+    required: true
+  - name: currency_code
+    type: string
+    required: true
+  - name: keywords
+    type: array
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.ad_group_resource_name
+  - result.campaign_resource_name
+  - result.currency_code
+  - result.items
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: remove_keywords
+  title: Remove keywords
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: criterion_resource_names
+    type: array
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.items
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: upsert_negative_keywords
+  title: Upsert negative keywords
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: scope
+    type: string
+    required: true
+  - name: parent_resource_name
+    type: string
+    required: true
+  - name: keywords
+    type: array
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.scope
+  - result.parent_resource_name
+  - result.items
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: set_campaign_targeting
+  title: Set campaign targeting
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: expected_customer_id
+    type: string
+    required: true
+  - name: expected_login_customer_id
+    type: string
+    required: true
+  - name: campaign_resource_name
+    type: string
+    required: true
+  - name: expected_current
+    type: object
+    required: true
+  - name: desired
+    type: object
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.request_id
+  - result.mutation_operation_count
+  - result.campaign_resource_name
+  - result.previous
+  - result.current
+  - result.changes
+  - result.account_time_zone
+  - result.preflight_is_provider_cas
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required
+- action_id: get_performance_report
+  title: Get performance report
+  required_scopes:
+  - extension:invoke
+  handler:
+    mode: extension
+  mutates_platform: false
+  workflow_visible: true
+  parameters:
+  - name: report_type
+    type: string
+    required: true
+  - name: start_date
+    type: string
+    required: true
+  - name: end_date
+    type: string
+    required: true
+  - name: dimensions
+    type: array
+    required: true
+  - name: metrics
+    type: array
+    required: true
+  result_fields:
+  - result.customer_id
+  - result.connection_id
+  - result.api_version
+  - result.report_type
+  - result.start_date
+  - result.end_date
+  - result.time_zone
+  - result.currency_code
+  - result.dimensions
+  - result.metrics
+  - result.rows
+  - result.complete
+  - result.truncated
+  - result.next_cursor
+  - result.narrowing_instruction
+  - result.search_term_privacy_limited
+  - result.conversions_may_be_delayed
+  error_codes:
+  - invalid_payload
+  - invalid_host_envelope
+  - invalid_connection
+  - authorization_required
+  - permission_denied
+  - account_not_bound
+  - account_access_lost
+  - production_access_required
+  - resource_not_found
+  - resource_account_mismatch
+  - unsupported_configuration
+  - validation_failed
+  - policy_violation
+  - state_conflict
+  - rate_limited
+  - quota_exceeded
+  - provider_unavailable
+  - timeout
+  - outcome_unknown
+  - internal_error
+  - external_effect_claim_required

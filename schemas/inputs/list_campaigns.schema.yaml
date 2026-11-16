@@ -1,0 +1,47 @@
+type: object
+additionalProperties: false
+properties:
+  statuses:
+    type: array
+    items:
+      type: string
+      enum:
+      - UNSPECIFIED
+      - UNKNOWN
+      - ENABLED
+      - PAUSED
+      - REMOVED
+    minItems: 1
+    maxItems: 5
+  advertising_channel_types:
+    type: array
+    items:
+      type: string
+      enum:
+      - UNSPECIFIED
+      - UNKNOWN
+      - SEARCH
+      - DISPLAY
+      - SHOPPING
+      - HOTEL
+      - VIDEO
+      - MULTI_CHANNEL
+      - LOCAL
+      - SMART
+      - PERFORMANCE_MAX
+      - LOCAL_SERVICES
+      - DISCOVERY
+      - TRAVEL
+      - DEMAND_GEN
+    minItems: 1
+    maxItems: 20
+  page_size:
+    type: integer
+    minimum: 1
+    maximum: 1000
+    default: 100
+  cursor:
+    type: string
+    minLength: 1
+    maxLength: 8192
+required: []

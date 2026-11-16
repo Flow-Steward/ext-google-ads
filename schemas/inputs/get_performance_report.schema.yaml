@@ -1,0 +1,386 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    report_type:
+      type: string
+      const: account_summary
+    start_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    end_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    dimensions:
+      type: array
+      items:
+        type: string
+        enum:
+        - date
+        - device
+      enum:
+      - []
+      - - date
+      - - device
+      - - date
+        - device
+      minItems: 0
+      maxItems: 2
+    metrics:
+      type: array
+      items:
+        type: string
+        enum:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+      minItems: 1
+      maxItems: 9
+  required:
+  - report_type
+  - start_date
+  - end_date
+  - dimensions
+  - metrics
+- type: object
+  additionalProperties: false
+  properties:
+    report_type:
+      type: string
+      const: campaign
+    start_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    end_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    dimensions:
+      type: array
+      items:
+        type: string
+        enum:
+        - campaign
+        - date
+        - device
+      enum:
+      - - campaign
+      - - campaign
+        - date
+      - - campaign
+        - device
+      - - campaign
+        - date
+        - device
+      minItems: 1
+      maxItems: 3
+    metrics:
+      type: array
+      items:
+        type: string
+        enum:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+      minItems: 1
+      maxItems: 9
+  required:
+  - report_type
+  - start_date
+  - end_date
+  - dimensions
+  - metrics
+- type: object
+  additionalProperties: false
+  properties:
+    report_type:
+      type: string
+      const: ad_group
+    start_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    end_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    dimensions:
+      type: array
+      items:
+        type: string
+        enum:
+        - campaign
+        - ad_group
+        - date
+        - device
+      enum:
+      - - campaign
+        - ad_group
+      - - campaign
+        - ad_group
+        - date
+      - - campaign
+        - ad_group
+        - device
+      - - campaign
+        - ad_group
+        - date
+        - device
+      minItems: 2
+      maxItems: 4
+    metrics:
+      type: array
+      items:
+        type: string
+        enum:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+      minItems: 1
+      maxItems: 9
+  required:
+  - report_type
+  - start_date
+  - end_date
+  - dimensions
+  - metrics
+- type: object
+  additionalProperties: false
+  properties:
+    report_type:
+      type: string
+      const: ad
+    start_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    end_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    dimensions:
+      type: array
+      items:
+        type: string
+        enum:
+        - campaign
+        - ad_group
+        - ad
+        - date
+        - device
+      enum:
+      - - campaign
+        - ad_group
+        - ad
+      - - campaign
+        - ad_group
+        - ad
+        - date
+      - - campaign
+        - ad_group
+        - ad
+        - device
+      - - campaign
+        - ad_group
+        - ad
+        - date
+        - device
+      minItems: 3
+      maxItems: 5
+    metrics:
+      type: array
+      items:
+        type: string
+        enum:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+      minItems: 1
+      maxItems: 9
+  required:
+  - report_type
+  - start_date
+  - end_date
+  - dimensions
+  - metrics
+- type: object
+  additionalProperties: false
+  properties:
+    report_type:
+      type: string
+      const: keyword
+    start_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    end_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    dimensions:
+      type: array
+      items:
+        type: string
+        enum:
+        - campaign
+        - ad_group
+        - keyword
+        - date
+        - device
+      enum:
+      - - campaign
+        - ad_group
+        - keyword
+      - - campaign
+        - ad_group
+        - keyword
+        - date
+      - - campaign
+        - ad_group
+        - keyword
+        - device
+      - - campaign
+        - ad_group
+        - keyword
+        - date
+        - device
+      minItems: 3
+      maxItems: 5
+    metrics:
+      type: array
+      items:
+        type: string
+        enum:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+      minItems: 1
+      maxItems: 9
+  required:
+  - report_type
+  - start_date
+  - end_date
+  - dimensions
+  - metrics
+- type: object
+  additionalProperties: false
+  properties:
+    report_type:
+      type: string
+      const: search_term
+    start_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    end_date:
+      type: string
+      minLength: 10
+      maxLength: 10
+      pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+      description: Calendar date; runtime checks validity, ordering and account timezone.
+    dimensions:
+      type: array
+      items:
+        type: string
+        enum:
+        - campaign
+        - ad_group
+        - search_term
+        - date
+        - device
+      enum:
+      - - campaign
+        - ad_group
+        - search_term
+      - - campaign
+        - ad_group
+        - search_term
+        - date
+      - - campaign
+        - ad_group
+        - search_term
+        - device
+      - - campaign
+        - ad_group
+        - search_term
+        - date
+        - device
+      minItems: 3
+      maxItems: 5
+    metrics:
+      type: array
+      items:
+        type: string
+        enum:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+      minItems: 1
+      maxItems: 9
+  required:
+  - report_type
+  - start_date
+  - end_date
+  - dimensions
+  - metrics

@@ -1,0 +1,44 @@
+page_id: setup
+title: Google Ads setup
+project_scoped: true
+components:
+- component_id: authorize_google
+  type: connection_form
+  title: Authorize Google
+  data:
+    oauth_provider_id: google_ads_oauth
+    connection_type: google_ads_account
+    oauth_intent: connect
+- component_id: select_ads_customer
+  type: connection_form
+  title: Configure the advertising account
+  description: Authorize first, select that connection, save customer/MCC, then check it. Save without a selected
+    row may create an unfinished connection; it cannot run Ads actions until OAuth and account setup are complete.
+  fields:
+  - field_id: customer_id
+    path: customer_id
+    label: Customer ID
+    widget: text
+    required: true
+  - field_id: login_customer_id
+    path: login_customer_id
+    label: Manager ID (omit for direct access)
+    widget: text
+    required: false
+  data:
+    connection_type: google_ads_account
+    config_fields:
+    - customer_id
+    - login_customer_id
+    secret_fields: []
+    test_action: bind_ads_account
+- component_id: compatibility_notes
+  type: markdown
+  title: Connection setup
+  body: Authorize first, select that connection in the account form, save customer/MCC, then check it. An unfinished
+    connection without OAuth cannot run Ads actions. Finish setup before starting workflows; prefer a separate connection
+    for another client. Saving settings while authorization is being refreshed may require reconnecting; avoiding
+    edits during active use reduces this risk but does not eliminate it. If authorization is lost, reconnect using
+    the standard flow. Revoking Google access may also disconnect this Google user from other connections using
+    the same Cloud project. Read the resource lists, then enter the campaign or ad group resource name or map it
+    from a previous workflow step. A failed read must be resolved before continuing.

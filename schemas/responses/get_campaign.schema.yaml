@@ -1,0 +1,336 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        customer_id:
+          type: string
+          minLength: 10
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        connection_id:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^conn_[A-Za-z0-9_-]+$
+        api_version:
+          type: string
+          const: v26
+        currency_code:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[A-Z]{3}$
+        time_zone:
+          type: string
+          minLength: 1
+          maxLength: 128
+        campaign:
+          type: object
+          additionalProperties: false
+          properties:
+            resource_name:
+              type: string
+              minLength: 1
+              maxLength: 255
+              pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+            name:
+              type: string
+              minLength: 0
+              maxLength: 1024
+            status:
+              type: string
+              enum:
+              - UNSPECIFIED
+              - UNKNOWN
+              - ENABLED
+              - PAUSED
+              - REMOVED
+            advertising_channel_type:
+              type: string
+              enum:
+              - UNSPECIFIED
+              - UNKNOWN
+              - SEARCH
+              - DISPLAY
+              - SHOPPING
+              - HOTEL
+              - VIDEO
+              - MULTI_CHANNEL
+              - LOCAL
+              - SMART
+              - PERFORMANCE_MAX
+              - LOCAL_SERVICES
+              - DISCOVERY
+              - TRAVEL
+              - DEMAND_GEN
+            campaign_budget:
+              type:
+              - string
+              - 'null'
+              minLength: 1
+              maxLength: 255
+              pattern: ^customers/[0-9]{10}/campaignBudgets/[0-9]+$
+            supported_for_writes:
+              type: boolean
+            start_date_time:
+              type:
+              - string
+              - 'null'
+              minLength: 19
+              maxLength: 19
+              pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$
+            end_date_time:
+              type:
+              - string
+              - 'null'
+              minLength: 19
+              maxLength: 19
+              pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$
+            network_settings:
+              type:
+              - object
+              - 'null'
+              additionalProperties: false
+              properties:
+                target_google_search:
+                  type: boolean
+                target_search_network:
+                  type: boolean
+                target_content_network:
+                  type: boolean
+                target_partner_search_network:
+                  type: boolean
+              required:
+              - target_google_search
+              - target_search_network
+              - target_content_network
+              - target_partner_search_network
+            budget:
+              type:
+              - object
+              - 'null'
+              additionalProperties: false
+              properties:
+                resource_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaignBudgets/[0-9]+$
+                amount_micros:
+                  type: string
+                  minLength: 1
+                  maxLength: 19
+                  pattern: ^(?:0|[1-9][0-9]{0,18})$
+                  description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                    increments.
+                explicitly_shared:
+                  type: boolean
+              required:
+              - resource_name
+              - amount_micros
+              - explicitly_shared
+            bidding:
+              type: object
+              additionalProperties: false
+              properties:
+                strategy_type:
+                  type: string
+                  minLength: 1
+                  maxLength: 128
+                strategy_resource:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/biddingStrategies/[0-9]+$
+                cpc_bid_ceiling_micros:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 19
+                  pattern: ^(?:0|[1-9][0-9]{0,18})$
+                  description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                    increments.
+                target_cpa_micros:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 19
+                  pattern: ^(?:0|[1-9][0-9]{0,18})$
+                  description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                    increments.
+              required:
+              - strategy_type
+              - strategy_resource
+              - cpc_bid_ceiling_micros
+              - target_cpa_micros
+            serving_status:
+              type: string
+              minLength: 1
+              maxLength: 128
+            primary_status:
+              type: string
+              minLength: 1
+              maxLength: 128
+            primary_status_reasons:
+              type: array
+              items:
+                type: string
+                minLength: 1
+                maxLength: 128
+              minItems: 0
+              maxItems: 100
+            contains_eu_political_advertising:
+              type:
+              - string
+              - 'null'
+              enum:
+              - UNSPECIFIED
+              - UNKNOWN
+              - CONTAINS_EU_POLITICAL_ADVERTISING
+              - DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING
+              - null
+          required:
+          - resource_name
+          - name
+          - status
+          - advertising_channel_type
+          - campaign_budget
+          - supported_for_writes
+          - start_date_time
+          - end_date_time
+          - network_settings
+          - budget
+          - bidding
+          - serving_status
+          - primary_status
+          - primary_status_reasons
+          - contains_eu_political_advertising
+      required:
+      - customer_id
+      - connection_id
+      - api_version
+      - currency_code
+      - time_zone
+      - campaign
+  required:
+  - ok
+  - result
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: false
+    result:
+      type: object
+      additionalProperties: false
+      properties: {}
+      required: []
+    error_code:
+      type: string
+      enum:
+      - invalid_payload
+      - invalid_host_envelope
+      - invalid_connection
+      - authorization_required
+      - permission_denied
+      - account_not_bound
+      - account_access_lost
+      - production_access_required
+      - resource_not_found
+      - resource_account_mismatch
+      - unsupported_configuration
+      - validation_failed
+      - policy_violation
+      - state_conflict
+      - rate_limited
+      - quota_exceeded
+      - provider_unavailable
+      - timeout
+      - outcome_unknown
+      - internal_error
+      - external_effect_claim_required
+    error:
+      type: string
+      minLength: 1
+      maxLength: 2048
+    errors:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          code:
+            type: string
+            enum:
+            - invalid_payload
+            - invalid_host_envelope
+            - invalid_connection
+            - authorization_required
+            - permission_denied
+            - account_not_bound
+            - account_access_lost
+            - production_access_required
+            - resource_not_found
+            - resource_account_mismatch
+            - unsupported_configuration
+            - validation_failed
+            - policy_violation
+            - state_conflict
+            - rate_limited
+            - quota_exceeded
+            - provider_unavailable
+            - timeout
+            - outcome_unknown
+            - internal_error
+            - external_effect_claim_required
+          message:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          field_path:
+            type: string
+            minLength: 0
+            maxLength: 512
+        required:
+        - code
+        - message
+      minItems: 1
+      maxItems: 100
+    retryable:
+      type: boolean
+    request_id:
+      type: string
+      minLength: 1
+      maxLength: 255
+    provider_error_code:
+      type: string
+      minLength: 1
+      maxLength: 255
+    restart_required:
+      type: boolean
+    external_effect_status:
+      type: string
+      enum:
+      - failed
+      - timeout_unknown
+    definitely_no_external_effect:
+      type: boolean
+  required:
+  - ok
+  - result
+  - error_code
+  - error
+  - errors
+  - retryable

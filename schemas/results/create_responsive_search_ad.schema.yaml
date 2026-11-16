@@ -1,0 +1,151 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  request_id:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 255
+  mutation_operation_count:
+    type: integer
+    minimum: 0
+    maximum: 10000
+  ad_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/ads/[0-9]+$
+  ad_group_ad_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/adGroupAds/[0-9]+~[0-9]+$
+  ad_group_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+  campaign_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  responsive_search_ad:
+    type: object
+    additionalProperties: false
+    properties:
+      headlines:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            text:
+              type: string
+              minLength: 1
+              maxLength: 30
+            pinned_field:
+              type: string
+              enum:
+              - HEADLINE_1
+              - HEADLINE_2
+              - HEADLINE_3
+          required:
+          - text
+        minItems: 3
+        maxItems: 15
+      descriptions:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            text:
+              type: string
+              minLength: 1
+              maxLength: 90
+            pinned_field:
+              type: string
+              enum:
+              - DESCRIPTION_1
+              - DESCRIPTION_2
+          required:
+          - text
+        minItems: 2
+        maxItems: 4
+      final_urls:
+        type: array
+        items:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          pattern: ^https?://[^\s]+$
+        minItems: 1
+        maxItems: 10
+      path1:
+        type: string
+        minLength: 0
+        maxLength: 15
+      path2:
+        type: string
+        minLength: 0
+        maxLength: 15
+    required:
+    - headlines
+    - descriptions
+    - final_urls
+    dependentRequired:
+      path2:
+      - path1
+  status:
+    type: string
+    const: PAUSED
+  policy:
+    type: object
+    additionalProperties: false
+    properties:
+      review_status:
+        type: string
+        enum:
+        - UNKNOWN
+        - REVIEW_IN_PROGRESS
+        - REVIEWED
+        - UNDER_APPEAL
+      approval_status:
+        type: string
+        enum:
+        - UNKNOWN
+        - APPROVED
+        - APPROVED_LIMITED
+        - DISAPPROVED
+        - AREA_OF_INTEREST_ONLY
+    required:
+    - review_status
+    - approval_status
+required:
+- customer_id
+- connection_id
+- api_version
+- request_id
+- mutation_operation_count
+- ad_resource_name
+- ad_group_ad_resource_name
+- ad_group_resource_name
+- campaign_resource_name
+- responsive_search_ad
+- status
+- policy

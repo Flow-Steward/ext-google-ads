@@ -1,0 +1,6022 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: account_summary
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              minLength: 0
+              maxLength: 4096
+            enum:
+            - []
+            minItems: 0
+            maxItems: 0
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: account_summary
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - date
+            enum:
+            - - date
+            minItems: 1
+            maxItems: 1
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - date
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: account_summary
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - device
+            enum:
+            - - device
+            minItems: 1
+            maxItems: 1
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: account_summary
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - date
+              - device
+            enum:
+            - - date
+              - device
+            minItems: 2
+            maxItems: 2
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - date
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: campaign
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+            enum:
+            - - campaign
+            minItems: 1
+            maxItems: 1
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: campaign
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - date
+            enum:
+            - - campaign
+              - date
+            minItems: 2
+            maxItems: 2
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - date
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: campaign
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - device
+            enum:
+            - - campaign
+              - device
+            minItems: 2
+            maxItems: 2
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: campaign
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - date
+              - device
+            enum:
+            - - campaign
+              - date
+              - device
+            minItems: 3
+            maxItems: 3
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - date
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad_group
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+            enum:
+            - - campaign
+              - ad_group
+            minItems: 2
+            maxItems: 2
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad_group
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - date
+            enum:
+            - - campaign
+              - ad_group
+              - date
+            minItems: 3
+            maxItems: 3
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - date
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad_group
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - device
+            minItems: 3
+            maxItems: 3
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad_group
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - date
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - date
+              - device
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - date
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - ad
+            enum:
+            - - campaign
+              - ad_group
+              - ad
+            minItems: 3
+            maxItems: 3
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                ad:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/ads/[0-9]+$
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - ad
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - ad
+              - date
+            enum:
+            - - campaign
+              - ad_group
+              - ad
+              - date
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                ad:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/ads/[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - ad
+              - date
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - ad
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - ad
+              - device
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                ad:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/ads/[0-9]+$
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - ad
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: ad
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - ad
+              - date
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - ad
+              - date
+              - device
+            minItems: 5
+            maxItems: 5
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                ad:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/ads/[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - ad
+              - date
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: keyword
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - keyword
+            enum:
+            - - campaign
+              - ad_group
+              - keyword
+            minItems: 3
+            maxItems: 3
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                keyword:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroupCriteria/[0-9]+~[0-9]+$
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - keyword
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: keyword
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - keyword
+              - date
+            enum:
+            - - campaign
+              - ad_group
+              - keyword
+              - date
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                keyword:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroupCriteria/[0-9]+~[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - keyword
+              - date
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: keyword
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - keyword
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - keyword
+              - device
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                keyword:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroupCriteria/[0-9]+~[0-9]+$
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - keyword
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: keyword
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - keyword
+              - date
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - keyword
+              - date
+              - device
+            minItems: 5
+            maxItems: 5
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                keyword:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroupCriteria/[0-9]+~[0-9]+$
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - keyword
+              - date
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: search_term
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - search_term
+            enum:
+            - - campaign
+              - ad_group
+              - search_term
+            minItems: 3
+            maxItems: 3
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                search_term:
+                  type: string
+                  minLength: 1
+                  maxLength: 4096
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - search_term
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: search_term
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - search_term
+              - date
+            enum:
+            - - campaign
+              - ad_group
+              - search_term
+              - date
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                search_term:
+                  type: string
+                  minLength: 1
+                  maxLength: 4096
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - search_term
+              - date
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: search_term
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - search_term
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - search_term
+              - device
+            minItems: 4
+            maxItems: 4
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                search_term:
+                  type: string
+                  minLength: 1
+                  maxLength: 4096
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - search_term
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+      - type: object
+        additionalProperties: false
+        properties:
+          customer_id:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{10}$
+          connection_id:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^conn_[A-Za-z0-9_-]+$
+          api_version:
+            type: string
+            const: v26
+          report_type:
+            type: string
+            const: search_term
+          start_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          end_date:
+            type: string
+            minLength: 10
+            maxLength: 10
+            pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+            description: Calendar date; runtime checks validity, ordering and account timezone.
+          time_zone:
+            type: string
+            minLength: 1
+            maxLength: 128
+          currency_code:
+            type: string
+            minLength: 3
+            maxLength: 3
+            pattern: ^[A-Z]{3}$
+          dimensions:
+            type: array
+            items:
+              type: string
+              enum:
+              - campaign
+              - ad_group
+              - search_term
+              - date
+              - device
+            enum:
+            - - campaign
+              - ad_group
+              - search_term
+              - date
+              - device
+            minItems: 5
+            maxItems: 5
+          metrics:
+            type: array
+            items:
+              type: string
+              enum:
+              - impressions
+              - clicks
+              - cost_micros
+              - conversions
+              - conversion_value
+              - ctr
+              - average_cpc_micros
+              - cpa_micros
+              - roas
+            minItems: 1
+            maxItems: 9
+          rows:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              properties:
+                campaign:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+                ad_group:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+                search_term:
+                  type: string
+                  minLength: 1
+                  maxLength: 4096
+                date:
+                  type: string
+                  minLength: 10
+                  maxLength: 10
+                  pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2}$
+                  description: Calendar date; runtime checks validity, ordering and account timezone.
+                device:
+                  type: string
+                  enum:
+                  - UNSPECIFIED
+                  - UNKNOWN
+                  - MOBILE
+                  - TABLET
+                  - DESKTOP
+                  - CONNECTED_TV
+                  - OTHER
+                metrics:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    impressions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    clicks:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Lossless nonnegative int64 string; semantic maximum 9223372036854775807.
+                    cost_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 19
+                      pattern: ^(?:0|[1-9][0-9]{0,18})$
+                      description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding
+                        increments.
+                    conversions:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    conversion_value:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    ctr:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    average_cpc_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    cpa_micros:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                    roas:
+                      type:
+                      - string
+                      - 'null'
+                      minLength: 1
+                      maxLength: 128
+                      pattern: ^-?(?:0|[1-9][0-9]*)(?:\.[0-9]+)?$
+                  required: []
+                  anyOf:
+                  - required:
+                    - impressions
+                  - required:
+                    - clicks
+                  - required:
+                    - cost_micros
+                  - required:
+                    - conversions
+                  - required:
+                    - conversion_value
+                  - required:
+                    - ctr
+                  - required:
+                    - average_cpc_micros
+                  - required:
+                    - cpa_micros
+                  - required:
+                    - roas
+              required:
+              - campaign
+              - ad_group
+              - search_term
+              - date
+              - device
+              - metrics
+            minItems: 0
+            maxItems: 10000
+          complete:
+            type: boolean
+          truncated:
+            type: boolean
+          next_cursor:
+            type: 'null'
+          narrowing_instruction:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 1024
+          search_term_privacy_limited:
+            type: boolean
+          conversions_may_be_delayed:
+            type: boolean
+            const: true
+        required:
+        - customer_id
+        - connection_id
+        - api_version
+        - report_type
+        - start_date
+        - end_date
+        - time_zone
+        - currency_code
+        - dimensions
+        - metrics
+        - rows
+        - complete
+        - truncated
+        - next_cursor
+        - narrowing_instruction
+        - search_term_privacy_limited
+        - conversions_may_be_delayed
+        allOf:
+        - if:
+            properties:
+              truncated:
+                const: true
+          then:
+            properties:
+              complete:
+                const: false
+              narrowing_instruction:
+                type: string
+                minLength: 1
+                maxLength: 1024
+          else:
+            properties:
+              complete:
+                const: true
+              narrowing_instruction:
+                type: 'null'
+  required:
+  - ok
+  - result
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: false
+    result:
+      type: object
+      additionalProperties: false
+      properties: {}
+      required: []
+    error_code:
+      type: string
+      enum:
+      - invalid_payload
+      - invalid_host_envelope
+      - invalid_connection
+      - authorization_required
+      - permission_denied
+      - account_not_bound
+      - account_access_lost
+      - production_access_required
+      - resource_not_found
+      - resource_account_mismatch
+      - unsupported_configuration
+      - validation_failed
+      - policy_violation
+      - state_conflict
+      - rate_limited
+      - quota_exceeded
+      - provider_unavailable
+      - timeout
+      - outcome_unknown
+      - internal_error
+      - external_effect_claim_required
+    error:
+      type: string
+      minLength: 1
+      maxLength: 2048
+    errors:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          code:
+            type: string
+            enum:
+            - invalid_payload
+            - invalid_host_envelope
+            - invalid_connection
+            - authorization_required
+            - permission_denied
+            - account_not_bound
+            - account_access_lost
+            - production_access_required
+            - resource_not_found
+            - resource_account_mismatch
+            - unsupported_configuration
+            - validation_failed
+            - policy_violation
+            - state_conflict
+            - rate_limited
+            - quota_exceeded
+            - provider_unavailable
+            - timeout
+            - outcome_unknown
+            - internal_error
+            - external_effect_claim_required
+          message:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          field_path:
+            type: string
+            minLength: 0
+            maxLength: 512
+        required:
+        - code
+        - message
+      minItems: 1
+      maxItems: 100
+    retryable:
+      type: boolean
+    request_id:
+      type: string
+      minLength: 1
+      maxLength: 255
+    provider_error_code:
+      type: string
+      minLength: 1
+      maxLength: 255
+    restart_required:
+      type: boolean
+    external_effect_status:
+      type: string
+      enum:
+      - failed
+      - timeout_unknown
+    definitely_no_external_effect:
+      type: boolean
+  required:
+  - ok
+  - result
+  - error_code
+  - error
+  - errors
+  - retryable

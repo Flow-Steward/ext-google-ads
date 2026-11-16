@@ -1,0 +1,19 @@
+type: object
+additionalProperties: false
+properties:
+  manager_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  page_size:
+    type: integer
+    minimum: 1
+    maximum: 1000
+    default: 100
+  cursor:
+    type: string
+    minLength: 1
+    maxLength: 8192
+required:
+- manager_id

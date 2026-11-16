@@ -1,0 +1,78 @@
+type: object
+additionalProperties: false
+properties:
+  expected_customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  expected_login_customer_id:
+    type: string
+    minLength: 0
+    maxLength: 10
+    pattern: ^(?:[0-9]{10})?$
+  resource_type:
+    type: string
+    enum:
+    - CAMPAIGN
+    - AD_GROUP
+    - AD_GROUP_AD
+  resource_name:
+    anyOf:
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/adGroupAds/[0-9]+~[0-9]+$
+  status:
+    type: string
+    enum:
+    - PAUSED
+    - ENABLED
+required:
+- expected_customer_id
+- expected_login_customer_id
+- resource_type
+- resource_name
+- status
+allOf:
+- if:
+    properties:
+      resource_type:
+        const: CAMPAIGN
+  then:
+    properties:
+      resource_name:
+        type: string
+        minLength: 1
+        maxLength: 255
+        pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+- if:
+    properties:
+      resource_type:
+        const: AD_GROUP
+  then:
+    properties:
+      resource_name:
+        type: string
+        minLength: 1
+        maxLength: 255
+        pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+- if:
+    properties:
+      resource_type:
+        const: AD_GROUP_AD
+  then:
+    properties:
+      resource_name:
+        type: string
+        minLength: 1
+        maxLength: 255
+        pattern: ^customers/[0-9]{10}/adGroupAds/[0-9]+~[0-9]+$

@@ -1,0 +1,204 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  items:
+    type: array
+    items:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        properties:
+          kind:
+            type: string
+            const: geo
+          resource_name:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/campaignCriteria/[0-9]+~[0-9]+$
+          geo_target_constant:
+            type: string
+            minLength: 1
+            maxLength: 128
+            pattern: ^geoTargetConstants/[0-9]+$
+          negative:
+            type: boolean
+          status:
+            type: string
+            enum:
+            - UNSPECIFIED
+            - UNKNOWN
+            - ENABLED
+            - PAUSED
+            - REMOVED
+        required:
+        - kind
+        - resource_name
+        - geo_target_constant
+        - negative
+        - status
+      - type: object
+        additionalProperties: false
+        properties:
+          kind:
+            type: string
+            const: ad_schedule
+          resource_name:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/campaignCriteria/[0-9]+~[0-9]+$
+          day:
+            type: string
+            enum:
+            - MONDAY
+            - TUESDAY
+            - WEDNESDAY
+            - THURSDAY
+            - FRIDAY
+            - SATURDAY
+            - SUNDAY
+          start_hour:
+            type: integer
+            minimum: 0
+            maximum: 23
+          start_minute:
+            type: integer
+            enum:
+            - 0
+            - 15
+            - 30
+            - 45
+          end_hour:
+            type: integer
+            minimum: 0
+            maximum: 24
+          end_minute:
+            type: integer
+            enum:
+            - 0
+            - 15
+            - 30
+            - 45
+        required:
+        - kind
+        - resource_name
+        - day
+        - start_hour
+        - start_minute
+        - end_hour
+        - end_minute
+      - type: object
+        additionalProperties: false
+        properties:
+          kind:
+            type: string
+            const: legacy_language
+          resource_name:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/campaignCriteria/[0-9]+~[0-9]+$
+          language_constant:
+            type: string
+            minLength: 1
+            maxLength: 128
+            pattern: ^languageConstants/[0-9]+$
+          serving:
+            type: boolean
+            const: false
+          legacy:
+            type: boolean
+            const: true
+        required:
+        - kind
+        - resource_name
+        - language_constant
+        - serving
+        - legacy
+    minItems: 0
+    maxItems: 1000
+  next_cursor:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 8192
+  truncated:
+    type: boolean
+  campaign:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  location_options:
+    type: object
+    additionalProperties: false
+    properties:
+      positive_geo_target_type:
+        type: string
+        enum:
+        - UNSPECIFIED
+        - UNKNOWN
+        - PRESENCE
+        - PRESENCE_OR_INTEREST
+        - SEARCH_INTEREST
+      negative_geo_target_type:
+        type: string
+        enum:
+        - UNSPECIFIED
+        - UNKNOWN
+        - PRESENCE
+        - PRESENCE_OR_INTEREST
+    required:
+    - positive_geo_target_type
+    - negative_geo_target_type
+  network_settings:
+    type: object
+    additionalProperties: false
+    properties:
+      target_google_search:
+        type: boolean
+      target_search_network:
+        type: boolean
+      target_content_network:
+        type: boolean
+      target_partner_search_network:
+        type: boolean
+    required:
+    - target_google_search
+    - target_search_network
+    - target_content_network
+    - target_partner_search_network
+required:
+- customer_id
+- connection_id
+- api_version
+- items
+- next_cursor
+- truncated
+- campaign
+- location_options
+- network_settings
+allOf:
+- if:
+    properties:
+      truncated:
+        const: true
+  then:
+    properties:
+      next_cursor:
+        type: 'null'

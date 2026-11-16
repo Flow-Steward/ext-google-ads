@@ -1,0 +1,99 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  items:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        resource_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+        name:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        status:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - UNKNOWN
+          - ENABLED
+          - PAUSED
+          - REMOVED
+        advertising_channel_type:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - UNKNOWN
+          - SEARCH
+          - DISPLAY
+          - SHOPPING
+          - HOTEL
+          - VIDEO
+          - MULTI_CHANNEL
+          - LOCAL
+          - SMART
+          - PERFORMANCE_MAX
+          - LOCAL_SERVICES
+          - DISCOVERY
+          - TRAVEL
+          - DEMAND_GEN
+        campaign_budget:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/campaignBudgets/[0-9]+$
+        supported_for_writes:
+          type: boolean
+      required:
+      - resource_name
+      - name
+      - status
+      - advertising_channel_type
+      - campaign_budget
+      - supported_for_writes
+    minItems: 0
+    maxItems: 1000
+  next_cursor:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 8192
+  truncated:
+    type: boolean
+required:
+- customer_id
+- connection_id
+- api_version
+- items
+- next_cursor
+- truncated
+allOf:
+- if:
+    properties:
+      truncated:
+        const: true
+  then:
+    properties:
+      next_cursor:
+        type: 'null'

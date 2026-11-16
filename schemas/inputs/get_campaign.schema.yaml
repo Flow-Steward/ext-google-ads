@@ -1,0 +1,10 @@
+type: object
+additionalProperties: false
+properties:
+  campaign:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+required:
+- campaign

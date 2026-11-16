@@ -1,0 +1,78 @@
+type: object
+additionalProperties: false
+properties:
+  expected_customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  expected_login_customer_id:
+    type: string
+    minLength: 0
+    maxLength: 10
+    pattern: ^(?:[0-9]{10})?$
+  scope:
+    type: string
+    enum:
+    - CAMPAIGN
+    - AD_GROUP
+  parent_resource_name:
+    anyOf:
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+  keywords:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 80
+        match_type:
+          type: string
+          enum:
+          - EXACT
+          - PHRASE
+          - BROAD
+      required:
+      - text
+      - match_type
+    minItems: 1
+    maxItems: 10000
+required:
+- expected_customer_id
+- expected_login_customer_id
+- scope
+- parent_resource_name
+- keywords
+allOf:
+- if:
+    properties:
+      scope:
+        const: CAMPAIGN
+  then:
+    properties:
+      parent_resource_name:
+        type: string
+        minLength: 1
+        maxLength: 255
+        pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+- if:
+    properties:
+      scope:
+        const: AD_GROUP
+  then:
+    properties:
+      parent_resource_name:
+        type: string
+        minLength: 1
+        maxLength: 255
+        pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$

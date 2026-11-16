@@ -1,0 +1,160 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  items:
+    type: array
+    items:
+      oneOf:
+      - type: object
+        additionalProperties: false
+        properties:
+          campaign:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+          text:
+            type: string
+            minLength: 1
+            maxLength: 4096
+          match_type:
+            type: string
+            enum:
+            - UNSPECIFIED
+            - UNKNOWN
+            - EXACT
+            - PHRASE
+            - BROAD
+          status:
+            type: string
+            enum:
+            - UNSPECIFIED
+            - UNKNOWN
+            - ENABLED
+            - PAUSED
+            - REMOVED
+          negative:
+            type: boolean
+          scope:
+            type: string
+            const: ad_group
+          resource_name:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/adGroupCriteria/[0-9]+~[0-9]+$
+          ad_group:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+          cpc_bid_micros:
+            type:
+            - string
+            - 'null'
+            minLength: 1
+            maxLength: 19
+            pattern: ^(?:0|[1-9][0-9]{0,18})$
+            description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+        required:
+        - campaign
+        - text
+        - match_type
+        - status
+        - negative
+        - scope
+        - resource_name
+        - ad_group
+        - cpc_bid_micros
+      - type: object
+        additionalProperties: false
+        properties:
+          campaign:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+          text:
+            type: string
+            minLength: 1
+            maxLength: 4096
+          match_type:
+            type: string
+            enum:
+            - UNSPECIFIED
+            - UNKNOWN
+            - EXACT
+            - PHRASE
+            - BROAD
+          status:
+            type: string
+            enum:
+            - UNSPECIFIED
+            - UNKNOWN
+            - ENABLED
+            - PAUSED
+            - REMOVED
+          negative:
+            type: boolean
+            const: true
+          scope:
+            type: string
+            const: campaign
+          resource_name:
+            type: string
+            minLength: 1
+            maxLength: 255
+            pattern: ^customers/[0-9]{10}/campaignCriteria/[0-9]+~[0-9]+$
+        required:
+        - campaign
+        - text
+        - match_type
+        - status
+        - negative
+        - scope
+        - resource_name
+    minItems: 0
+    maxItems: 1000
+  next_cursor:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 8192
+  truncated:
+    type: boolean
+  currency_code:
+    type: string
+    minLength: 3
+    maxLength: 3
+    pattern: ^[A-Z]{3}$
+required:
+- customer_id
+- connection_id
+- api_version
+- items
+- next_cursor
+- truncated
+- currency_code
+allOf:
+- if:
+    properties:
+      truncated:
+        const: true
+  then:
+    properties:
+      next_cursor:
+        type: 'null'

@@ -1,0 +1,42 @@
+type: object
+additionalProperties: false
+properties:
+  expected_customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  expected_login_customer_id:
+    type: string
+    minLength: 0
+    maxLength: 10
+    pattern: ^(?:[0-9]{10})?$
+  campaign_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  amount_micros:
+    type: string
+    minLength: 1
+    maxLength: 19
+    pattern: ^[1-9][0-9]{0,18}$
+    description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+  currency_code:
+    type: string
+    minLength: 3
+    maxLength: 3
+    pattern: ^[A-Z]{3}$
+  expected_current_amount_micros:
+    type: string
+    minLength: 1
+    maxLength: 19
+    pattern: ^[1-9][0-9]{0,18}$
+    description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+required:
+- expected_customer_id
+- expected_login_customer_id
+- campaign_resource_name
+- amount_micros
+- currency_code
+- expected_current_amount_micros

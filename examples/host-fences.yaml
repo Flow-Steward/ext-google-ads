@@ -1,0 +1,15 @@
+synthetic: true
+cases:
+- name: named write without host effect
+  operation_id: create_search_campaign
+  remove_runtime_context_field: external_effect_id
+  expected_error: external_effect_claim_required
+- name: forged input effect is not a grant
+  operation_id: create_search_campaign
+  input_addition:
+    external_effect_id: not_authority
+  expected_error: invalid_payload
+- name: invoke_tool alias never dispatches writes
+  action: invoke_tool
+  tool_name: create_search_campaign
+  expected_error: invalid_payload

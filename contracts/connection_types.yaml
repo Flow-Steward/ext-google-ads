@@ -1,0 +1,42 @@
+connection_types:
+- connection_type_id: google_ads_account
+  display_name: Google Ads account
+  description: One operator-configured customer/MCC pair per project OAuth connection.
+  auth:
+    type: oauth2
+    provider_id: google_ads_oauth
+    scopes:
+      required:
+      - openid
+      - email
+      - https://www.googleapis.com/auth/adwords
+      optional: []
+  config_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      customer_id:
+        type: string
+        minLength: 10
+        maxLength: 10
+        pattern: ^[0-9]{10}$
+      login_customer_id:
+        type: string
+        minLength: 10
+        maxLength: 10
+        pattern: ^[0-9]{10}$
+      oauth:
+        type: object
+        additionalProperties: true
+        readOnly: true
+        description: Host-owned OAuth metadata. The extension never writes this partition.
+    required: []
+  secret_schema:
+    type: object
+    additionalProperties: false
+    properties:
+      access_token:
+        type: string
+        minLength: 1
+        maxLength: 8192
+    required: []

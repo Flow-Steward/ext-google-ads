@@ -1,0 +1,194 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  items:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        ad_group_ad:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/adGroupAds/[0-9]+~[0-9]+$
+        ad:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/ads/[0-9]+$
+        ad_group:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+        campaign:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+        type:
+          type: string
+          minLength: 1
+          maxLength: 128
+        status:
+          type: string
+          enum:
+          - UNSPECIFIED
+          - UNKNOWN
+          - ENABLED
+          - PAUSED
+          - REMOVED
+        responsive_search_ad:
+          type:
+          - object
+          - 'null'
+          additionalProperties: false
+          properties:
+            headlines:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  text:
+                    type: string
+                    minLength: 1
+                    maxLength: 4096
+                  pinned_field:
+                    type:
+                    - string
+                    - 'null'
+                    minLength: 1
+                    maxLength: 128
+                required:
+                - text
+                - pinned_field
+              minItems: 0
+              maxItems: 15
+            descriptions:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  text:
+                    type: string
+                    minLength: 1
+                    maxLength: 4096
+                  pinned_field:
+                    type:
+                    - string
+                    - 'null'
+                    minLength: 1
+                    maxLength: 128
+                required:
+                - text
+                - pinned_field
+              minItems: 0
+              maxItems: 4
+            path1:
+              type: string
+              minLength: 0
+              maxLength: 15
+            path2:
+              type: string
+              minLength: 0
+              maxLength: 15
+          required:
+          - headlines
+          - descriptions
+          - path1
+          - path2
+        final_urls:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          minItems: 0
+          maxItems: 100
+        policy:
+          type: object
+          additionalProperties: false
+          properties:
+            approval_status:
+              type: string
+              minLength: 1
+              maxLength: 128
+            review_status:
+              type: string
+              minLength: 1
+              maxLength: 128
+            topic_entries:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                properties:
+                  topic:
+                    type: string
+                    minLength: 1
+                    maxLength: 1024
+                  type:
+                    type: string
+                    minLength: 1
+                    maxLength: 128
+                required:
+                - topic
+                - type
+              minItems: 0
+              maxItems: 100
+          required:
+          - approval_status
+          - review_status
+          - topic_entries
+      required:
+      - ad_group_ad
+      - ad
+      - ad_group
+      - campaign
+      - type
+      - status
+      - responsive_search_ad
+      - final_urls
+      - policy
+    minItems: 0
+    maxItems: 1000
+  next_cursor:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 8192
+  truncated:
+    type: boolean
+required:
+- customer_id
+- connection_id
+- api_version
+- items
+- next_cursor
+- truncated
+allOf:
+- if:
+    properties:
+      truncated:
+        const: true
+  then:
+    properties:
+      next_cursor:
+        type: 'null'

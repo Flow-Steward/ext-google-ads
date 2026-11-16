@@ -1,0 +1,88 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  currency_code:
+    type: string
+    minLength: 3
+    maxLength: 3
+    pattern: ^[A-Z]{3}$
+  campaign_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  status:
+    type: string
+    const: PAUSED
+  explicitly_shared:
+    type: boolean
+    const: false
+  resource_mapping:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      properties:
+        local_key:
+          type: string
+          minLength: 1
+          maxLength: 64
+        kind:
+          type: string
+          enum:
+          - budget
+          - campaign
+          - ad_group
+          - ad
+          - keyword
+          - criterion
+        resource_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/[A-Za-z]+/[0-9]+(?:~[0-9]+)?$
+        status:
+          type: string
+          enum:
+          - PAUSED
+          - ENABLED
+          - NOT_APPLICABLE
+      required:
+      - local_key
+      - kind
+      - resource_name
+      - status
+    minItems: 1
+    maxItems: 10000
+  expanded_operation_count:
+    type: integer
+    minimum: 1
+    maximum: 10000
+  request_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+required:
+- customer_id
+- connection_id
+- api_version
+- currency_code
+- campaign_resource_name
+- status
+- explicitly_shared
+- resource_mapping
+- expanded_operation_count
+- request_id

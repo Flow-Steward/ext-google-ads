@@ -1,0 +1,174 @@
+operation_id: get_performance_report
+synthetic: true
+notice: Host-envelope fixture, not an end-user API request or real authorization. Tokens deliberately omitted; host
+  injects selected access token only at execution.
+success:
+  request:
+    contract_version: extension_host_v2
+    mode: action
+    action:
+      action_id: get_performance_report
+      context:
+        project_id: project_fixture
+      target:
+        connection:
+          connection_id: conn_ads_client_a
+          connection_type: google_ads_account
+          config:
+            oauth:
+              lifecycle_status: connected
+            customer_id: '1234567890'
+            login_customer_id: '9876543210'
+      input:
+        report_type: campaign
+        start_date: '2026-11-01'
+        end_date: '2026-11-07'
+        dimensions:
+        - campaign
+        - date
+        metrics:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+    runtime_context:
+      account_id: account_fixture
+      project_id: project_fixture
+      workflow_id: workflow_fixture
+      job_id: job_fixture
+      group_id: null
+      for_each_id: null
+      step_id: step_fixture
+      step_execution_id: execution_fixture
+      test_mode: false
+  response:
+    ok: true
+    result:
+      customer_id: '1234567890'
+      connection_id: conn_ads_client_a
+      api_version: v26
+      report_type: campaign
+      start_date: '2026-11-01'
+      end_date: '2026-11-07'
+      time_zone: Europe/Vilnius
+      currency_code: EUR
+      dimensions:
+      - campaign
+      - date
+      metrics:
+      - impressions
+      - clicks
+      - cost_micros
+      - conversions
+      - conversion_value
+      - ctr
+      - average_cpc_micros
+      - cpa_micros
+      - roas
+      rows:
+      - campaign: customers/1234567890/campaigns/1001
+        date: '2026-11-01'
+        metrics:
+          impressions: '1000'
+          clicks: '25'
+          cost_micros: '5000000'
+          conversions: '2.5'
+          conversion_value: '25.0'
+          ctr: '0.025'
+          average_cpc_micros: '200000'
+          cpa_micros: '2000000'
+          roas: '5'
+      complete: true
+      truncated: false
+      next_cursor: null
+      narrowing_instruction: null
+      search_term_privacy_limited: false
+      conversions_may_be_delayed: true
+error:
+  request:
+    contract_version: extension_host_v2
+    mode: action
+    action:
+      action_id: get_performance_report
+      context:
+        project_id: project_fixture
+      target:
+        connection:
+          connection_id: conn_ads_client_a
+          connection_type: google_ads_account
+          config:
+            oauth:
+              lifecycle_status: connected
+            customer_id: '1234567890'
+            login_customer_id: '9876543210'
+      input:
+        report_type: campaign
+        start_date: '2026-11-01'
+        end_date: '2026-11-07'
+        dimensions:
+        - campaign
+        - date
+        metrics:
+        - impressions
+        - clicks
+        - cost_micros
+        - conversions
+        - conversion_value
+        - ctr
+        - average_cpc_micros
+        - cpa_micros
+        - roas
+    runtime_context:
+      account_id: account_fixture
+      project_id: project_fixture
+      workflow_id: workflow_fixture
+      job_id: job_fixture
+      group_id: null
+      for_each_id: null
+      step_id: step_fixture
+      step_execution_id: execution_fixture
+      test_mode: false
+  response:
+    ok: false
+    result: {}
+    error_code: validation_failed
+    error: Unsupported report combination, invalid period, or response byte limit exceeded; narrow the period or
+      filters.
+    errors:
+    - code: validation_failed
+      message: Unsupported report combination, invalid period, or response byte limit exceeded; narrow the period
+        or filters.
+    retryable: false
+schema_rejection:
+  input:
+    report_type: campaign
+    start_date: '2026-11-01'
+    end_date: '2026-11-07'
+    dimensions:
+    - campaign
+    - date
+    metrics:
+    - impressions
+    - clicks
+    - cost_micros
+    - conversions
+    - conversion_value
+    - ctr
+    - average_cpc_micros
+    - cpa_micros
+    - roas
+    unrecognized_input: true
+  response:
+    ok: false
+    result: {}
+    error_code: invalid_payload
+    error: The input is invalid.
+    errors:
+    - code: invalid_payload
+      message: The input is invalid.
+    retryable: false

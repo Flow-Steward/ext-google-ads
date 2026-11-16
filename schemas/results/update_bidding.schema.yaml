@@ -1,0 +1,117 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  request_id:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 255
+  mutation_operation_count:
+    type: integer
+    minimum: 0
+    maximum: 10000
+  campaign_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  previous_strategy:
+    type: string
+    enum:
+    - MANUAL_CPC
+    - MAXIMIZE_CLICKS
+    - MAXIMIZE_CONVERSIONS
+  bidding:
+    type: object
+    additionalProperties: false
+    properties:
+      strategy:
+        type: string
+        enum:
+        - MANUAL_CPC
+        - MAXIMIZE_CLICKS
+        - MAXIMIZE_CONVERSIONS
+      cpc_bid_ceiling_micros:
+        type: string
+        minLength: 1
+        maxLength: 19
+        pattern: ^[1-9][0-9]{0,18}$
+        description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+      target_cpa_micros:
+        type: string
+        minLength: 1
+        maxLength: 19
+        pattern: ^[1-9][0-9]{0,18}$
+        description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+    required:
+    - strategy
+    allOf:
+    - if:
+        properties:
+          strategy:
+            const: MANUAL_CPC
+      then:
+        not:
+          anyOf:
+          - required:
+            - cpc_bid_ceiling_micros
+          - required:
+            - target_cpa_micros
+    - if:
+        properties:
+          strategy:
+            const: MAXIMIZE_CLICKS
+      then:
+        not:
+          required:
+          - target_cpa_micros
+    - if:
+        properties:
+          strategy:
+            const: MAXIMIZE_CONVERSIONS
+      then:
+        not:
+          required:
+          - cpc_bid_ceiling_micros
+  currency_code:
+    type: string
+    minLength: 3
+    maxLength: 3
+    pattern: ^[A-Z]{3}$
+  update_mask:
+    type: array
+    items:
+      type: string
+      enum:
+      - manual_cpc
+      - target_spend
+      - target_spend.cpc_bid_ceiling_micros
+      - maximize_conversions
+      - maximize_conversions.target_cpa_micros
+    minItems: 1
+    maxItems: 5
+required:
+- customer_id
+- connection_id
+- api_version
+- request_id
+- mutation_operation_count
+- campaign_resource_name
+- previous_strategy
+- bidding
+- currency_code
+- update_mask

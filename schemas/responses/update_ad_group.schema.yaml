@@ -1,0 +1,238 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        customer_id:
+          type: string
+          minLength: 10
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        connection_id:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^conn_[A-Za-z0-9_-]+$
+        api_version:
+          type: string
+          const: v26
+        request_id:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+        mutation_operation_count:
+          type: integer
+          minimum: 0
+          maximum: 10000
+        ad_group_resource_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+        campaign_resource_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        status:
+          type: string
+          enum:
+          - PAUSED
+          - ENABLED
+        cpc_bid_micros:
+          type: string
+          minLength: 1
+          maxLength: 19
+          pattern: ^[1-9][0-9]{0,18}$
+          description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+        currency_code:
+          type: string
+          minLength: 3
+          maxLength: 3
+          pattern: ^[A-Z]{3}$
+        update_mask:
+          type: array
+          items:
+            type: string
+            enum:
+            - name
+            - cpc_bid_micros
+          minItems: 1
+          maxItems: 2
+      required:
+      - customer_id
+      - connection_id
+      - api_version
+      - request_id
+      - mutation_operation_count
+      - ad_group_resource_name
+      - campaign_resource_name
+      - name
+      - status
+      - currency_code
+      - update_mask
+    external_effect_status:
+      type: string
+      const: succeeded
+    definitely_no_external_effect:
+      type: boolean
+      const: false
+  required:
+  - ok
+  - result
+  - external_effect_status
+  - definitely_no_external_effect
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: false
+    result:
+      type: object
+      additionalProperties: false
+      properties: {}
+      required: []
+    error_code:
+      type: string
+      enum:
+      - invalid_payload
+      - invalid_host_envelope
+      - invalid_connection
+      - authorization_required
+      - permission_denied
+      - account_not_bound
+      - account_access_lost
+      - production_access_required
+      - resource_not_found
+      - resource_account_mismatch
+      - unsupported_configuration
+      - validation_failed
+      - policy_violation
+      - state_conflict
+      - rate_limited
+      - quota_exceeded
+      - provider_unavailable
+      - timeout
+      - outcome_unknown
+      - internal_error
+      - external_effect_claim_required
+    error:
+      type: string
+      minLength: 1
+      maxLength: 2048
+    errors:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          code:
+            type: string
+            enum:
+            - invalid_payload
+            - invalid_host_envelope
+            - invalid_connection
+            - authorization_required
+            - permission_denied
+            - account_not_bound
+            - account_access_lost
+            - production_access_required
+            - resource_not_found
+            - resource_account_mismatch
+            - unsupported_configuration
+            - validation_failed
+            - policy_violation
+            - state_conflict
+            - rate_limited
+            - quota_exceeded
+            - provider_unavailable
+            - timeout
+            - outcome_unknown
+            - internal_error
+            - external_effect_claim_required
+          message:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          field_path:
+            type: string
+            minLength: 0
+            maxLength: 512
+        required:
+        - code
+        - message
+      minItems: 1
+      maxItems: 100
+    retryable:
+      type: boolean
+    request_id:
+      type: string
+      minLength: 1
+      maxLength: 255
+    provider_error_code:
+      type: string
+      minLength: 1
+      maxLength: 255
+    restart_required:
+      type: boolean
+    external_effect_status:
+      type: string
+      enum:
+      - failed
+      - timeout_unknown
+    definitely_no_external_effect:
+      type: boolean
+  required:
+  - ok
+  - result
+  - error_code
+  - error
+  - errors
+  - retryable
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        test_mode_status:
+          type: string
+          const: suppressed
+        external_effect_status:
+          type: string
+          const: suppressed
+        definitely_no_external_effect:
+          type: boolean
+          const: true
+      required:
+      - test_mode_status
+      - external_effect_status
+      - definitely_no_external_effect
+    external_effect_status:
+      type: string
+      const: suppressed
+    definitely_no_external_effect:
+      type: boolean
+      const: true
+  required:
+  - ok
+  - result
+  - external_effect_status
+  - definitely_no_external_effect

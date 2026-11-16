@@ -1,0 +1,88 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  request_id:
+    type:
+    - string
+    - 'null'
+    minLength: 1
+    maxLength: 255
+  mutation_operation_count:
+    type: integer
+    minimum: 0
+    maximum: 10000
+  resource_type:
+    type: string
+    enum:
+    - CAMPAIGN
+    - AD_GROUP
+    - AD_GROUP_AD
+  resource_name:
+    anyOf:
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+    - type: string
+      minLength: 1
+      maxLength: 255
+      pattern: ^customers/[0-9]{10}/adGroupAds/[0-9]+~[0-9]+$
+  previous_status:
+    type: string
+    enum:
+    - PAUSED
+    - ENABLED
+  status:
+    type: string
+    enum:
+    - PAUSED
+    - ENABLED
+  update_mask:
+    type: array
+    items:
+      type: string
+      enum:
+      - status
+    minItems: 1
+    maxItems: 1
+  serving_guaranteed:
+    type: boolean
+    const: false
+  delivery_notes:
+    type: array
+    items:
+      type: string
+      minLength: 1
+      maxLength: 512
+    minItems: 0
+    maxItems: 20
+required:
+- customer_id
+- connection_id
+- api_version
+- request_id
+- mutation_operation_count
+- resource_type
+- resource_name
+- previous_status
+- status
+- update_mask
+- serving_guaranteed
+- delivery_notes

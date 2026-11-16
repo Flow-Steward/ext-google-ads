@@ -1,0 +1,90 @@
+type: object
+additionalProperties: false
+properties:
+  expected_customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  expected_login_customer_id:
+    type: string
+    minLength: 0
+    maxLength: 10
+    pattern: ^(?:[0-9]{10})?$
+  ad_group_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+  responsive_search_ad:
+    type: object
+    additionalProperties: false
+    properties:
+      headlines:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            text:
+              type: string
+              minLength: 1
+              maxLength: 30
+            pinned_field:
+              type: string
+              enum:
+              - HEADLINE_1
+              - HEADLINE_2
+              - HEADLINE_3
+          required:
+          - text
+        minItems: 3
+        maxItems: 15
+      descriptions:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          properties:
+            text:
+              type: string
+              minLength: 1
+              maxLength: 90
+            pinned_field:
+              type: string
+              enum:
+              - DESCRIPTION_1
+              - DESCRIPTION_2
+          required:
+          - text
+        minItems: 2
+        maxItems: 4
+      final_urls:
+        type: array
+        items:
+          type: string
+          minLength: 1
+          maxLength: 2048
+          pattern: ^https?://[^\s]+$
+        minItems: 1
+        maxItems: 10
+      path1:
+        type: string
+        minLength: 0
+        maxLength: 15
+      path2:
+        type: string
+        minLength: 0
+        maxLength: 15
+    required:
+    - headlines
+    - descriptions
+    - final_urls
+    dependentRequired:
+      path2:
+      - path1
+required:
+- expected_customer_id
+- expected_login_customer_id
+- ad_group_resource_name
+- responsive_search_ad

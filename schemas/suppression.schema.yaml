@@ -1,0 +1,34 @@
+type: object
+additionalProperties: false
+properties:
+  ok:
+    type: boolean
+    const: true
+  result:
+    type: object
+    additionalProperties: false
+    properties:
+      test_mode_status:
+        type: string
+        const: suppressed
+      external_effect_status:
+        type: string
+        const: suppressed
+      definitely_no_external_effect:
+        type: boolean
+        const: true
+    required:
+    - test_mode_status
+    - external_effect_status
+    - definitely_no_external_effect
+  external_effect_status:
+    type: string
+    const: suppressed
+  definitely_no_external_effect:
+    type: boolean
+    const: true
+required:
+- ok
+- result
+- external_effect_status
+- definitely_no_external_effect

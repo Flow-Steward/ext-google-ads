@@ -1,0 +1,178 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        customer_id:
+          type: string
+          minLength: 10
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        connection_id:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^conn_[A-Za-z0-9_-]+$
+        api_version:
+          type: string
+          const: v26
+        valid:
+          type: boolean
+          const: true
+        expanded_operation_count:
+          type: integer
+          minimum: 1
+          maximum: 10000
+        warnings:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              code:
+                type: string
+                minLength: 1
+                maxLength: 128
+              message:
+                type: string
+                minLength: 1
+                maxLength: 2048
+              field_path:
+                type: string
+                minLength: 0
+                maxLength: 512
+            required:
+            - code
+            - message
+            - field_path
+          minItems: 0
+          maxItems: 100
+        request_id:
+          type: string
+          minLength: 1
+          maxLength: 255
+      required:
+      - customer_id
+      - connection_id
+      - api_version
+      - valid
+      - expanded_operation_count
+      - warnings
+      - request_id
+  required:
+  - ok
+  - result
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: false
+    result:
+      type: object
+      additionalProperties: false
+      properties: {}
+      required: []
+    error_code:
+      type: string
+      enum:
+      - invalid_payload
+      - invalid_host_envelope
+      - invalid_connection
+      - authorization_required
+      - permission_denied
+      - account_not_bound
+      - account_access_lost
+      - production_access_required
+      - resource_not_found
+      - resource_account_mismatch
+      - unsupported_configuration
+      - validation_failed
+      - policy_violation
+      - state_conflict
+      - rate_limited
+      - quota_exceeded
+      - provider_unavailable
+      - timeout
+      - outcome_unknown
+      - internal_error
+      - external_effect_claim_required
+    error:
+      type: string
+      minLength: 1
+      maxLength: 2048
+    errors:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          code:
+            type: string
+            enum:
+            - invalid_payload
+            - invalid_host_envelope
+            - invalid_connection
+            - authorization_required
+            - permission_denied
+            - account_not_bound
+            - account_access_lost
+            - production_access_required
+            - resource_not_found
+            - resource_account_mismatch
+            - unsupported_configuration
+            - validation_failed
+            - policy_violation
+            - state_conflict
+            - rate_limited
+            - quota_exceeded
+            - provider_unavailable
+            - timeout
+            - outcome_unknown
+            - internal_error
+            - external_effect_claim_required
+          message:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          field_path:
+            type: string
+            minLength: 0
+            maxLength: 512
+        required:
+        - code
+        - message
+      minItems: 1
+      maxItems: 100
+    retryable:
+      type: boolean
+    request_id:
+      type: string
+      minLength: 1
+      maxLength: 255
+    provider_error_code:
+      type: string
+      minLength: 1
+      maxLength: 255
+    restart_required:
+      type: boolean
+    external_effect_status:
+      type: string
+      enum:
+      - failed
+      - timeout_unknown
+    definitely_no_external_effect:
+      type: boolean
+  required:
+  - ok
+  - result
+  - error_code
+  - error
+  - errors
+  - retryable

@@ -1,0 +1,325 @@
+forms:
+- operation_id: get_account
+  title: Get account
+  fields: []
+- operation_id: list_campaigns
+  title: List campaigns
+  fields:
+  - name: statuses
+    widget_type: json
+    required: false
+  - name: advertising_channel_types
+    widget_type: json
+    required: false
+  - name: page_size
+    widget_type: number
+    required: false
+  - name: cursor
+    widget_type: text
+    required: false
+- operation_id: get_campaign
+  title: Get campaign
+  fields:
+  - name: campaign
+    widget_type: text
+    required: true
+- operation_id: list_ad_groups
+  title: List ad groups
+  fields:
+  - name: campaign
+    widget_type: text
+    required: true
+  - name: page_size
+    widget_type: number
+    required: false
+  - name: cursor
+    widget_type: text
+    required: false
+- operation_id: list_ads
+  title: List ads
+  fields:
+  - name: campaign
+    widget_type: text
+    required: false
+  - name: ad_group
+    widget_type: text
+    required: false
+  - name: page_size
+    widget_type: number
+    required: false
+  - name: cursor
+    widget_type: text
+    required: false
+- operation_id: list_keywords
+  title: List keywords
+  fields:
+  - name: campaign
+    widget_type: text
+    required: false
+  - name: ad_group
+    widget_type: text
+    required: false
+  - name: page_size
+    widget_type: number
+    required: false
+  - name: cursor
+    widget_type: text
+    required: false
+- operation_id: list_targeting
+  title: List targeting
+  fields:
+  - name: campaign
+    widget_type: text
+    required: true
+  - name: page_size
+    widget_type: number
+    required: false
+  - name: cursor
+    widget_type: text
+    required: false
+- operation_id: validate_search_campaign
+  title: Validate search campaign
+  fields:
+  - name: specification
+    widget_type: json
+    required: true
+- operation_id: create_search_campaign
+  title: Create search campaign
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: specification
+    widget_type: json
+    required: true
+- operation_id: update_campaign
+  title: Update campaign
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: campaign_resource_name
+    widget_type: text
+    required: true
+  - name: patch
+    widget_type: json
+    required: true
+- operation_id: update_campaign_budget
+  title: Update campaign budget
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: campaign_resource_name
+    widget_type: text
+    required: true
+  - name: amount_micros
+    widget_type: text
+    required: true
+  - name: currency_code
+    widget_type: text
+    required: true
+  - name: expected_current_amount_micros
+    widget_type: text
+    required: true
+- operation_id: update_bidding
+  title: Update bidding
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: campaign_resource_name
+    widget_type: text
+    required: true
+  - name: bidding
+    widget_type: json
+    required: true
+  - name: expected_current_strategy
+    widget_type: text
+    required: true
+  - name: currency_code
+    widget_type: text
+    required: true
+- operation_id: create_ad_group
+  title: Create ad group
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: campaign_resource_name
+    widget_type: text
+    required: true
+  - name: name
+    widget_type: text
+    required: true
+  - name: cpc_bid_micros
+    widget_type: text
+    required: false
+  - name: currency_code
+    widget_type: text
+    required: true
+- operation_id: update_ad_group
+  title: Update ad group
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: ad_group_resource_name
+    widget_type: text
+    required: true
+  - name: patch
+    widget_type: json
+    required: true
+  - name: currency_code
+    widget_type: text
+    required: true
+- operation_id: create_responsive_search_ad
+  title: Create responsive search ad
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: ad_group_resource_name
+    widget_type: text
+    required: true
+  - name: responsive_search_ad
+    widget_type: json
+    required: true
+- operation_id: update_responsive_search_ad
+  title: Update responsive search ad
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: ad_resource_name
+    widget_type: text
+    required: true
+  - name: patch
+    widget_type: json
+    required: true
+- operation_id: set_delivery_status
+  title: Set delivery status
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: resource_type
+    widget_type: text
+    required: true
+  - name: resource_name
+    widget_type: text
+    required: true
+  - name: status
+    widget_type: text
+    required: true
+- operation_id: upsert_keywords
+  title: Upsert keywords
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: ad_group_resource_name
+    widget_type: text
+    required: true
+  - name: currency_code
+    widget_type: text
+    required: true
+  - name: keywords
+    widget_type: json
+    required: true
+- operation_id: remove_keywords
+  title: Remove keywords
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: criterion_resource_names
+    widget_type: json
+    required: true
+- operation_id: upsert_negative_keywords
+  title: Upsert negative keywords
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: scope
+    widget_type: text
+    required: true
+  - name: parent_resource_name
+    widget_type: text
+    required: true
+  - name: keywords
+    widget_type: json
+    required: true
+- operation_id: set_campaign_targeting
+  title: Set campaign targeting
+  fields:
+  - name: expected_customer_id
+    widget_type: text
+    required: true
+  - name: expected_login_customer_id
+    widget_type: text
+    required: true
+  - name: campaign_resource_name
+    widget_type: text
+    required: true
+  - name: expected_current
+    widget_type: json
+    required: true
+  - name: desired
+    widget_type: json
+    required: true
+- operation_id: get_performance_report
+  title: Get performance report
+  fields:
+  - name: report_type
+    widget_type: text
+    required: true
+  - name: start_date
+    widget_type: text
+    required: true
+  - name: end_date
+    widget_type: text
+    required: true
+  - name: dimensions
+    widget_type: json
+    required: true
+  - name: metrics
+    widget_type: json
+    required: true

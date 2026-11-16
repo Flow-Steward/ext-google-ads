@@ -1,0 +1,28 @@
+type: object
+additionalProperties: false
+properties:
+  subject:
+    type: string
+    minLength: 1
+    maxLength: 512
+  verified_display_name:
+    type: string
+    minLength: 1
+    maxLength: 512
+  verified_email:
+    type: string
+    minLength: 3
+    maxLength: 320
+  safe_metadata:
+    type: object
+    additionalProperties: false
+    properties: {}
+    required: []
+  health:
+    type: string
+    const: ok
+required:
+- subject
+- verified_email
+- safe_metadata
+- health

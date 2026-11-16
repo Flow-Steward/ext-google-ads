@@ -1,0 +1,274 @@
+operation_id: validate_search_campaign
+synthetic: true
+notice: Host-envelope fixture, not an end-user API request or real authorization. Tokens deliberately omitted; host
+  injects selected access token only at execution.
+success:
+  request:
+    contract_version: extension_host_v2
+    mode: action
+    action:
+      action_id: validate_search_campaign
+      context:
+        project_id: project_fixture
+      target:
+        connection:
+          connection_id: conn_ads_client_a
+          connection_type: google_ads_account
+          config:
+            oauth:
+              lifecycle_status: connected
+            customer_id: '1234567890'
+            login_customer_id: '9876543210'
+      input:
+        specification:
+          name: Synthetic agency client A Search
+          currency_code: EUR
+          average_daily_budget_micros: '20000000'
+          bidding:
+            strategy: MANUAL_CPC
+          start_date_time: '2026-11-20 00:00:00'
+          network_settings:
+            target_google_search: true
+            target_search_network: false
+            target_content_network: false
+          contains_eu_political_advertising: DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING
+          targeting:
+            geo_target_constants:
+            - geoTargetConstants/2440
+            location_options:
+              positive_geo_target_type: PRESENCE
+              negative_geo_target_type: PRESENCE
+            schedule:
+              mode: all_time
+          ad_groups:
+          - key: services
+            name: Services
+            cpc_bid_micros: '1000000'
+            ads:
+            - key: services_ad
+              content:
+                headlines:
+                - text: Example Search Campaign
+                - text: Services For Businesses
+                - text: Contact Our Team
+                descriptions:
+                - text: Explore the example service and request a quote.
+                - text: Visit our website to learn about available options.
+                final_urls:
+                - https://example.com/services
+                path1: services
+            keywords:
+            - key: services_keyword
+              text: example services
+              match_type: EXACT
+          - key: consulting
+            name: Consulting
+            cpc_bid_micros: '1500000'
+            ads:
+            - key: consulting_ad
+              content:
+                headlines:
+                - text: Example Search Campaign
+                - text: Services For Businesses
+                - text: Contact Our Team
+                descriptions:
+                - text: Explore the example service and request a quote.
+                - text: Visit our website to learn about available options.
+                final_urls:
+                - https://example.com/services
+                path1: services
+            keywords:
+            - key: consulting_keyword
+              text: example consulting
+              match_type: PHRASE
+    runtime_context:
+      account_id: account_fixture
+      project_id: project_fixture
+      workflow_id: workflow_fixture
+      job_id: job_fixture
+      group_id: null
+      for_each_id: null
+      step_id: step_fixture
+      step_execution_id: execution_fixture
+      test_mode: false
+  response:
+    ok: true
+    result:
+      customer_id: '1234567890'
+      connection_id: conn_ads_client_a
+      api_version: v26
+      valid: true
+      expanded_operation_count: 9
+      warnings: []
+      request_id: synthetic-google-validation-001
+error:
+  request:
+    contract_version: extension_host_v2
+    mode: action
+    action:
+      action_id: validate_search_campaign
+      context:
+        project_id: project_fixture
+      target:
+        connection:
+          connection_id: conn_ads_client_a
+          connection_type: google_ads_account
+          config:
+            oauth:
+              lifecycle_status: connected
+            customer_id: '1234567890'
+            login_customer_id: '9876543210'
+      input:
+        specification:
+          name: Synthetic agency client A Search
+          currency_code: EUR
+          average_daily_budget_micros: '20000000'
+          bidding:
+            strategy: MANUAL_CPC
+          start_date_time: '2026-11-20 00:00:00'
+          network_settings:
+            target_google_search: true
+            target_search_network: false
+            target_content_network: false
+          contains_eu_political_advertising: DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING
+          targeting:
+            geo_target_constants:
+            - geoTargetConstants/2440
+            location_options:
+              positive_geo_target_type: PRESENCE
+              negative_geo_target_type: PRESENCE
+            schedule:
+              mode: all_time
+          ad_groups:
+          - key: services
+            name: Services
+            cpc_bid_micros: '1000000'
+            ads:
+            - key: services_ad
+              content:
+                headlines:
+                - text: Example Search Campaign
+                - text: Services For Businesses
+                - text: Contact Our Team
+                descriptions:
+                - text: Explore the example service and request a quote.
+                - text: Visit our website to learn about available options.
+                final_urls:
+                - https://example.com/services
+                path1: services
+            keywords:
+            - key: services_keyword
+              text: example services
+              match_type: EXACT
+          - key: consulting
+            name: Consulting
+            cpc_bid_micros: '1500000'
+            ads:
+            - key: consulting_ad
+              content:
+                headlines:
+                - text: Example Search Campaign
+                - text: Services For Businesses
+                - text: Contact Our Team
+                descriptions:
+                - text: Explore the example service and request a quote.
+                - text: Visit our website to learn about available options.
+                final_urls:
+                - https://example.com/services
+                path1: services
+            keywords:
+            - key: consulting_keyword
+              text: example consulting
+              match_type: PHRASE
+    runtime_context:
+      account_id: account_fixture
+      project_id: project_fixture
+      workflow_id: workflow_fixture
+      job_id: job_fixture
+      group_id: null
+      for_each_id: null
+      step_id: step_fixture
+      step_execution_id: execution_fixture
+      test_mode: false
+  response:
+    ok: false
+    result: {}
+    error_code: authorization_required
+    error: Reconnect the selected Google account.
+    errors:
+    - code: authorization_required
+      message: Reconnect the selected Google account.
+    retryable: false
+schema_rejection:
+  input:
+    specification:
+      name: Synthetic agency client A Search
+      currency_code: EUR
+      average_daily_budget_micros: '20000000'
+      bidding:
+        strategy: MANUAL_CPC
+      start_date_time: '2026-11-20 00:00:00'
+      network_settings:
+        target_google_search: true
+        target_search_network: false
+        target_content_network: false
+      contains_eu_political_advertising: DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING
+      targeting:
+        geo_target_constants:
+        - geoTargetConstants/2440
+        location_options:
+          positive_geo_target_type: PRESENCE
+          negative_geo_target_type: PRESENCE
+        schedule:
+          mode: all_time
+      ad_groups:
+      - key: services
+        name: Services
+        cpc_bid_micros: '1000000'
+        ads:
+        - key: services_ad
+          content:
+            headlines:
+            - text: Example Search Campaign
+            - text: Services For Businesses
+            - text: Contact Our Team
+            descriptions:
+            - text: Explore the example service and request a quote.
+            - text: Visit our website to learn about available options.
+            final_urls:
+            - https://example.com/services
+            path1: services
+        keywords:
+        - key: services_keyword
+          text: example services
+          match_type: EXACT
+      - key: consulting
+        name: Consulting
+        cpc_bid_micros: '1500000'
+        ads:
+        - key: consulting_ad
+          content:
+            headlines:
+            - text: Example Search Campaign
+            - text: Services For Businesses
+            - text: Contact Our Team
+            descriptions:
+            - text: Explore the example service and request a quote.
+            - text: Visit our website to learn about available options.
+            final_urls:
+            - https://example.com/services
+            path1: services
+        keywords:
+        - key: consulting_keyword
+          text: example consulting
+          match_type: PHRASE
+    unrecognized_input: true
+  response:
+    ok: false
+    result: {}
+    error_code: invalid_payload
+    error: The input is invalid.
+    errors:
+    - code: invalid_payload
+      message: The input is invalid.
+    retryable: false

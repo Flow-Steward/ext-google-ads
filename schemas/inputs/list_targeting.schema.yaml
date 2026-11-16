@@ -1,0 +1,19 @@
+type: object
+additionalProperties: false
+properties:
+  campaign:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+  page_size:
+    type: integer
+    minimum: 1
+    maximum: 1000
+    default: 100
+  cursor:
+    type: string
+    minLength: 1
+    maxLength: 8192
+required:
+- campaign

@@ -1,0 +1,49 @@
+type: object
+additionalProperties: false
+properties:
+  expected_customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  expected_login_customer_id:
+    type: string
+    minLength: 0
+    maxLength: 10
+    pattern: ^(?:[0-9]{10})?$
+  ad_group_resource_name:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^customers/[0-9]{10}/adGroups/[0-9]+$
+  patch:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+        minLength: 1
+        maxLength: 255
+      cpc_bid_micros:
+        type: string
+        minLength: 1
+        maxLength: 19
+        pattern: ^[1-9][0-9]{0,18}$
+        description: Base-10 int64 micros; runtime must check <= 9223372036854775807 and currency/bidding increments.
+    required: []
+    anyOf:
+    - required:
+      - name
+    - required:
+      - cpc_bid_micros
+  currency_code:
+    type: string
+    minLength: 3
+    maxLength: 3
+    pattern: ^[A-Z]{3}$
+required:
+- expected_customer_id
+- expected_login_customer_id
+- ad_group_resource_name
+- patch
+- currency_code

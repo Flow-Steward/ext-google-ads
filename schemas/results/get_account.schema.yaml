@@ -1,0 +1,77 @@
+type: object
+additionalProperties: false
+properties:
+  customer_id:
+    type: string
+    minLength: 10
+    maxLength: 10
+    pattern: ^[0-9]{10}$
+  connection_id:
+    type: string
+    minLength: 1
+    maxLength: 255
+    pattern: ^conn_[A-Za-z0-9_-]+$
+  api_version:
+    type: string
+    const: v26
+  account:
+    type: object
+    additionalProperties: false
+    properties:
+      resource_name:
+        type: string
+        minLength: 1
+        maxLength: 64
+        pattern: ^customers/[0-9]{10}$
+      descriptive_name:
+        type:
+        - string
+        - 'null'
+        minLength: 0
+        maxLength: 1024
+      manager:
+        type: boolean
+      test_account:
+        type: boolean
+      status:
+        type: string
+        enum:
+        - UNSPECIFIED
+        - UNKNOWN
+        - ENABLED
+        - CANCELED
+        - SUSPENDED
+        - CLOSED
+      currency_code:
+        type: string
+        minLength: 3
+        maxLength: 3
+        pattern: ^[A-Z]{3}$
+      time_zone:
+        type: string
+        minLength: 1
+        maxLength: 128
+      contains_eu_political_advertising:
+        type:
+        - string
+        - 'null'
+        enum:
+        - UNSPECIFIED
+        - UNKNOWN
+        - CONTAINS_EU_POLITICAL_ADVERTISING
+        - DOES_NOT_CONTAIN_EU_POLITICAL_ADVERTISING
+        - null
+    required:
+    - resource_name
+    - descriptive_name
+    - manager
+    - test_account
+    - status
+    - currency_code
+    - time_zone
+    - contains_eu_political_advertising
+required:
+- customer_id
+- connection_id
+- api_version
+- account

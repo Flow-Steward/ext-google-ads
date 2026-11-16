@@ -1,0 +1,268 @@
+oneOf:
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        customer_id:
+          type: string
+          minLength: 10
+          maxLength: 10
+          pattern: ^[0-9]{10}$
+        connection_id:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^conn_[A-Za-z0-9_-]+$
+        api_version:
+          type: string
+          const: v26
+        request_id:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 255
+        mutation_operation_count:
+          type: integer
+          minimum: 0
+          maximum: 10000
+        campaign_resource_name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ^customers/[0-9]{10}/campaigns/[0-9]+$
+        applied_patch:
+          type: object
+          additionalProperties: false
+          properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 255
+            start_date_time:
+              type: string
+              minLength: 19
+              maxLength: 19
+              pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$
+              description: yyyy-MM-dd HH:mm:ss in the bound account timezone; runtime validates calendar and v26
+                mutation rules.
+            end_date_time:
+              type: string
+              minLength: 19
+              maxLength: 19
+              pattern: ^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$
+              description: yyyy-MM-dd HH:mm:ss in the bound account timezone; runtime validates calendar and v26
+                mutation rules.
+            network_settings:
+              type: object
+              additionalProperties: false
+              properties:
+                target_google_search:
+                  type: boolean
+                  const: true
+                target_search_network:
+                  type: boolean
+                target_content_network:
+                  type: boolean
+                  const: false
+              required:
+              - target_google_search
+              - target_search_network
+              - target_content_network
+          required: []
+          anyOf:
+          - required:
+            - name
+          - required:
+            - start_date_time
+          - required:
+            - end_date_time
+          - required:
+            - network_settings
+        update_mask:
+          type: array
+          items:
+            type: string
+            enum:
+            - name
+            - start_date_time
+            - end_date_time
+            - network_settings.target_google_search
+            - network_settings.target_search_network
+            - network_settings.target_content_network
+          minItems: 1
+          maxItems: 6
+        status:
+          type: string
+          enum:
+          - PAUSED
+          - ENABLED
+      required:
+      - customer_id
+      - connection_id
+      - api_version
+      - request_id
+      - mutation_operation_count
+      - campaign_resource_name
+      - applied_patch
+      - update_mask
+      - status
+    external_effect_status:
+      type: string
+      const: succeeded
+    definitely_no_external_effect:
+      type: boolean
+      const: false
+  required:
+  - ok
+  - result
+  - external_effect_status
+  - definitely_no_external_effect
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: false
+    result:
+      type: object
+      additionalProperties: false
+      properties: {}
+      required: []
+    error_code:
+      type: string
+      enum:
+      - invalid_payload
+      - invalid_host_envelope
+      - invalid_connection
+      - authorization_required
+      - permission_denied
+      - account_not_bound
+      - account_access_lost
+      - production_access_required
+      - resource_not_found
+      - resource_account_mismatch
+      - unsupported_configuration
+      - validation_failed
+      - policy_violation
+      - state_conflict
+      - rate_limited
+      - quota_exceeded
+      - provider_unavailable
+      - timeout
+      - outcome_unknown
+      - internal_error
+      - external_effect_claim_required
+    error:
+      type: string
+      minLength: 1
+      maxLength: 2048
+    errors:
+      type: array
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          code:
+            type: string
+            enum:
+            - invalid_payload
+            - invalid_host_envelope
+            - invalid_connection
+            - authorization_required
+            - permission_denied
+            - account_not_bound
+            - account_access_lost
+            - production_access_required
+            - resource_not_found
+            - resource_account_mismatch
+            - unsupported_configuration
+            - validation_failed
+            - policy_violation
+            - state_conflict
+            - rate_limited
+            - quota_exceeded
+            - provider_unavailable
+            - timeout
+            - outcome_unknown
+            - internal_error
+            - external_effect_claim_required
+          message:
+            type: string
+            minLength: 1
+            maxLength: 2048
+          field_path:
+            type: string
+            minLength: 0
+            maxLength: 512
+        required:
+        - code
+        - message
+      minItems: 1
+      maxItems: 100
+    retryable:
+      type: boolean
+    request_id:
+      type: string
+      minLength: 1
+      maxLength: 255
+    provider_error_code:
+      type: string
+      minLength: 1
+      maxLength: 255
+    restart_required:
+      type: boolean
+    external_effect_status:
+      type: string
+      enum:
+      - failed
+      - timeout_unknown
+    definitely_no_external_effect:
+      type: boolean
+  required:
+  - ok
+  - result
+  - error_code
+  - error
+  - errors
+  - retryable
+- type: object
+  additionalProperties: false
+  properties:
+    ok:
+      type: boolean
+      const: true
+    result:
+      type: object
+      additionalProperties: false
+      properties:
+        test_mode_status:
+          type: string
+          const: suppressed
+        external_effect_status:
+          type: string
+          const: suppressed
+        definitely_no_external_effect:
+          type: boolean
+          const: true
+      required:
+      - test_mode_status
+      - external_effect_status
+      - definitely_no_external_effect
+    external_effect_status:
+      type: string
+      const: suppressed
+    definitely_no_external_effect:
+      type: boolean
+      const: true
+  required:
+  - ok
+  - result
+  - external_effect_status
+  - definitely_no_external_effect

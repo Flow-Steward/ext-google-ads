@@ -1,0 +1,123 @@
+operation_id: list_ads
+synthetic: true
+notice: Host-envelope fixture, not an end-user API request or real authorization. Tokens deliberately omitted; host
+  injects selected access token only at execution.
+success:
+  request:
+    contract_version: extension_host_v2
+    mode: action
+    action:
+      action_id: list_ads
+      context:
+        project_id: project_fixture
+      target:
+        connection:
+          connection_id: conn_ads_client_a
+          connection_type: google_ads_account
+          config:
+            oauth:
+              lifecycle_status: connected
+            customer_id: '1234567890'
+            login_customer_id: '9876543210'
+      input:
+        ad_group: customers/1234567890/adGroups/2001
+        page_size: 100
+    runtime_context:
+      account_id: account_fixture
+      project_id: project_fixture
+      workflow_id: workflow_fixture
+      job_id: job_fixture
+      group_id: null
+      for_each_id: null
+      step_id: step_fixture
+      step_execution_id: execution_fixture
+      test_mode: false
+  response:
+    ok: true
+    result:
+      customer_id: '1234567890'
+      connection_id: conn_ads_client_a
+      api_version: v26
+      items:
+      - ad_group_ad: customers/1234567890/adGroupAds/2001~3001
+        ad: customers/1234567890/ads/3001
+        ad_group: customers/1234567890/adGroups/2001
+        campaign: customers/1234567890/campaigns/1001
+        type: RESPONSIVE_SEARCH_AD
+        status: PAUSED
+        responsive_search_ad:
+          headlines:
+          - text: Synthetic headline one
+            pinned_field: null
+          - text: Synthetic headline two
+            pinned_field: null
+          - text: Synthetic headline three
+            pinned_field: null
+          descriptions:
+          - text: Synthetic description one
+            pinned_field: null
+          - text: Synthetic description two
+            pinned_field: null
+          path1: ''
+          path2: ''
+        final_urls:
+        - https://example.invalid/
+        policy:
+          approval_status: APPROVED
+          review_status: REVIEWED
+          topic_entries: []
+      next_cursor: null
+      truncated: false
+error:
+  request:
+    contract_version: extension_host_v2
+    mode: action
+    action:
+      action_id: list_ads
+      context:
+        project_id: project_fixture
+      target:
+        connection:
+          connection_id: conn_ads_client_a
+          connection_type: google_ads_account
+          config:
+            oauth:
+              lifecycle_status: connected
+            customer_id: '1234567890'
+            login_customer_id: '9876543210'
+      input:
+        ad_group: customers/1234567890/adGroups/2001
+        page_size: 100
+    runtime_context:
+      account_id: account_fixture
+      project_id: project_fixture
+      workflow_id: workflow_fixture
+      job_id: job_fixture
+      group_id: null
+      for_each_id: null
+      step_id: step_fixture
+      step_execution_id: execution_fixture
+      test_mode: false
+  response:
+    ok: false
+    result: {}
+    error_code: authorization_required
+    error: Reconnect the selected Google account.
+    errors:
+    - code: authorization_required
+      message: Reconnect the selected Google account.
+    retryable: false
+schema_rejection:
+  input:
+    ad_group: customers/1234567890/adGroups/2001
+    page_size: 100
+    unrecognized_input: true
+  response:
+    ok: false
+    result: {}
+    error_code: invalid_payload
+    error: The input is invalid.
+    errors:
+    - code: invalid_payload
+      message: The input is invalid.
+    retryable: false

@@ -22,3 +22,13 @@ Run from this repository root in the authoring container. Each locked dependency
 Build only from a **clean staging directory** populated from a verified committed tree. The target bundler does not exclude this repository's `.git`, authoring logs or previous distributions automatically; never point it directly at the developer checkout. Include committed runtime wheels; omit authoring-only dev wheels and evidence logs. Then run public `extensions validate` and `extensions bundle` against the staging parent. Keep archives below50MiB compressed/150MiB uncompressed and record SHA256. Bundling is not installation or publication, and no production advertising is authorized by these checks.
 
 Before release, complete the pending installed/browser/live acceptance in ACCEPTANCE.md, validate the approved callable agent-read workflows on the installed host, verify the actual G3 limits and review the final committed state. Any live write needs a deliberately authorized test account/action path; fake-provider tests must remain labelled synthetic.
+
+The archive installer also validates `extension-descriptor.yaml` before merging the executable bundle. Its strict artifact schema cannot declare OAuth callbacks. Keep the executable OAuth contract in `extension.yaml`; omit `runtime.extension_contract_v2` from the artifact descriptor so the standard bundle import inherits the complete contract. Duplicating its OAuth refs there makes installation fail before the merge.
+
+Run the additional host boundary check inside the exact target audit image, with the bundle mounted read-only and the host's `/app` on `PYTHONPATH`:
+
+```sh
+PYTHONPATH=/app python /authoring/flowsteward_google_ads/tests/host_checks/verify_descriptor.py
+```
+
+This check uses core only as the external test harness. It validates the artifact descriptor and merged runtime contract, including OAuth release fingerprints, the account connection, all 26 actions and 28 workflow artifacts. Run it on the extracted archive as well; public manifest validation alone does not exercise this install boundary.

@@ -1,5 +1,7 @@
 """Shared bounded atomic writes and fresh Search ancestry checks."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 import json
 from .accounts import call
 from .errors import AdsError
@@ -44,7 +46,7 @@ def ad(ctx, send, name):
     rows, cursor = search(
         ctx,
         send,
-        f"SELECT {AD_FIELDS} FROM ad_group_ad WHERE ad_group_ad.resource_name = {literal(name)}",
+        f"SELECT {AD_FIELDS} FROM ad_group_ad WHERE ad_group_ad.resource_name = {literal(name)}",  # nosec B608
     )
     if cursor or len(rows) != 1 or rows[0].get("adGroupAd", {}).get("resourceName") != name:
         raise AdsError("resource_not_found", "The selected ad is unavailable.")

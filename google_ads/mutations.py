@@ -1,5 +1,7 @@
 """Explicit campaign, budget, bidding, group and delivery operations."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 from copy import deepcopy
 from .accounts import get_account
 from .reads import base, literal, resource, GROUP_FIELDS, KEYWORD_FIELDS, campaign_row
@@ -41,12 +43,12 @@ def manual_compatible(ctx, send, c):
     groups = complete_rows(
         ctx,
         send,
-        f"SELECT {GROUP_FIELDS} FROM ad_group WHERE {condition} AND ad_group.status != 'REMOVED'",
+        f"SELECT {GROUP_FIELDS} FROM ad_group WHERE {condition} AND ad_group.status != 'REMOVED'",  # nosec B608
     )
     keywords = complete_rows(
         ctx,
         send,
-        f"SELECT {KEYWORD_FIELDS} FROM ad_group_criterion WHERE {condition} AND ad_group_criterion.type = 'KEYWORD' AND ad_group_criterion.negative = FALSE AND ad_group_criterion.status != 'REMOVED'",
+        f"SELECT {KEYWORD_FIELDS} FROM ad_group_criterion WHERE {condition} AND ad_group_criterion.type = 'KEYWORD' AND ad_group_criterion.negative = FALSE AND ad_group_criterion.status != 'REMOVED'",  # nosec B608
     )
     defaults = {r["adGroup"]["resourceName"]: r["adGroup"].get("cpcBidMicros") for r in groups}
     for row in keywords:
@@ -129,7 +131,7 @@ def execute(ctx, send):
         rows = complete_rows(
             ctx,
             send,
-            f"SELECT campaign_budget.resource_name, campaign_budget.amount_micros, campaign_budget.explicitly_shared, campaign_budget.period FROM campaign_budget WHERE campaign_budget.resource_name = {literal(name)}",
+            f"SELECT campaign_budget.resource_name, campaign_budget.amount_micros, campaign_budget.explicitly_shared, campaign_budget.period FROM campaign_budget WHERE campaign_budget.resource_name = {literal(name)}",  # nosec B608
         )
         if len(rows) != 1 or rows[0].get("campaignBudget", {}).get("resourceName") != name:
             conflict("The campaign budget changed or is unavailable.")
@@ -137,11 +139,11 @@ def execute(ctx, send):
         users = complete_rows(
             ctx,
             send,
-            f"SELECT campaign.resource_name FROM campaign WHERE campaign.campaign_budget = {literal(name)} AND campaign.status != 'REMOVED'",
+            f"SELECT campaign.resource_name FROM campaign WHERE campaign.campaign_budget = {literal(name)} AND campaign.status != 'REMOVED'",  # nosec B608
         )
         names = sorted(r["campaign"]["resourceName"] for r in users)
         if (
-            b.get("explicitlyShared") is not False
+            b.get("explicitlyShared", False) is not False
             or b.get("period") != "DAILY"
             or names != [campaign_name]
         ):
@@ -168,7 +170,7 @@ def execute(ctx, send):
             "previous_amount_micros": previous,
             "amount_micros": actual["amountMicros"],
             "currency_code": account["currency_code"],
-            "explicitly_shared": actual["explicitlyShared"],
+            "explicitly_shared": actual.get("explicitlyShared", False),
             "period": b["period"],
             "affected_campaign_resource_names": names,
             "update_mask": mask,

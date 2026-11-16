@@ -1,5 +1,7 @@
 """Finite GAQL reports with exact Decimal ratios and bounded inline rows."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 from datetime import date
 from decimal import Decimal, InvalidOperation, localcontext, ROUND_HALF_EVEN
 import json
@@ -157,11 +159,11 @@ def execute(ctx, send):
         needed.update(DEPENDENCIES[metric] if metric in DEPENDENCIES else [metric])
     fields = [FIELDS[key] for key in dimensions] + [GAQL[key] for key in sorted(needed)]
     # All fields/source/layouts are validated closed schema constants, dates are parsed above.
-    query = f"SELECT {', '.join(fields)} FROM {SOURCES[v['report_type']]} WHERE segments.date BETWEEN '{start.isoformat()}' AND '{end.isoformat()}'"
+    query = f"SELECT {', '.join(fields)} FROM {SOURCES[v['report_type']]} WHERE segments.date BETWEEN '{start.isoformat()}' AND '{end.isoformat()}'"  # nosec B608
     if dimensions:
         query += " ORDER BY " + ", ".join(FIELDS[key] for key in dimensions)
     rows = []
-    token = ""
+    provider_cursor = ""
     seen = set()
     truncated = False
     used = 1024
@@ -170,7 +172,7 @@ def execute(ctx, send):
             truncated = True
             break
         try:
-            page, next_token = search(ctx, send, query, token)
+            page, next_token = search(ctx, send, query, provider_cursor)
         except AdsError as error:
             if error.code == "timeout" and rows:
                 truncated = True
@@ -193,10 +195,10 @@ def execute(ctx, send):
         if len(rows) >= MAX_ROWS:
             truncated = True
             break
-        if next_token in seen or next_token == token:
+        if next_token in seen or next_token == provider_cursor:
             raise AdsError("provider_unavailable", "The provider repeated a report page cursor.")
         seen.add(next_token)
-        token = next_token
+        provider_cursor = next_token
     return {
         **base(ctx),
         "report_type": v["report_type"],

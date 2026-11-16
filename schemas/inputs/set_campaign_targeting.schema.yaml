@@ -27,7 +27,7 @@ properties:
           minLength: 1
           maxLength: 128
           pattern: ^geoTargetConstants/[0-9]+$
-        minItems: 1
+        minItems: 0
         maxItems: 1000
       location_options:
         type: object

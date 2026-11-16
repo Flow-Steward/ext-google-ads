@@ -1,5 +1,7 @@
 """RSA creation and supported mutable AdService content updates."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 from copy import deepcopy
 from .accounts import get_account, call
 from .reads import base, resource, literal, AD_FIELDS
@@ -67,7 +69,7 @@ def execute(ctx, send):
         rows = complete_rows(
             ctx,
             send,
-            f"SELECT {AD_FIELDS} FROM ad_group_ad WHERE ad_group_ad.ad.resource_name = {literal(name)} AND ad_group_ad.status != 'REMOVED'",
+            f"SELECT {AD_FIELDS} FROM ad_group_ad WHERE ad_group_ad.ad.resource_name = {literal(name)} AND ad_group_ad.status != 'REMOVED'",  # nosec B608
         )
         if not rows:
             raise AdsError("resource_not_found", "The selected ad is unavailable.")

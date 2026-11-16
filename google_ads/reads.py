@@ -1,5 +1,7 @@
 """Allowlisted ordinary read actions and Google REST-to-contract projections."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 from __future__ import annotations
 from dataclasses import replace
 import re
@@ -69,10 +71,10 @@ def base(ctx):
     }
 
 
-def search(ctx, send, query, token="", customer=None):
+def search(ctx, send, query, provider_cursor="", customer=None):
     body = {"query": query}
-    if token:
-        body["pageToken"] = token
+    if provider_cursor:
+        body["pageToken"] = provider_cursor
     reply = call(ctx, send, f"customers/{customer or ctx.customer}/googleAds:search", body)
     if not isinstance(reply.body, dict) or not isinstance(reply.body.get("results", []), list):
         raise AdsError("provider_unavailable", "Invalid provider search response.")
@@ -86,13 +88,13 @@ def paged(ctx, send, queries, project):
     binding = digest(queries)
     state = decode(ctx, binding)
     index = state.get("index", 0)
-    token = state.get("page", "")
+    provider_cursor = state.get("page", "")
     offset = state.get("offset", 0)
     expected = state.get("fingerprint")
     selected = []
     size = ctx.values.get("page_size", 100)
     while index < len(queries):
-        rows, next_page = search(ctx, send, queries[index], token)
+        rows, next_page = search(ctx, send, queries[index], provider_cursor)
         fingerprint = digest(rows)
         if expected and fingerprint != expected:
             raise AdsError(
@@ -111,22 +113,27 @@ def paged(ctx, send, queries, project):
             cursor = encode(
                 ctx,
                 binding,
-                {"index": index, "page": token, "offset": offset, "fingerprint": fingerprint},
+                {
+                    "index": index,
+                    "page": provider_cursor,
+                    "offset": offset,
+                    "fingerprint": fingerprint,
+                },
             )
             return selected, cursor, False
         if next_page:
-            if next_page == token:
+            if next_page == provider_cursor:
                 raise AdsError("provider_unavailable", "The provider repeated its page cursor.")
-            token = next_page
+            provider_cursor = next_page
         else:
             index += 1
-            token = ""
+            provider_cursor = ""
         offset = 0
         expected = None
         if len(selected) >= size and index < len(queries):
             return (
                 selected,
-                encode(ctx, binding, {"index": index, "page": token, "offset": 0}),
+                encode(ctx, binding, {"index": index, "page": provider_cursor, "offset": 0}),
                 False,
             )
     return selected, None, False
@@ -137,7 +144,7 @@ def campaign_row(ctx, send, name):
     rows, _ = search(
         ctx,
         send,
-        f"SELECT {CAMPAIGN_FIELDS} FROM campaign WHERE campaign.resource_name = {literal(name)}",
+        f"SELECT {CAMPAIGN_FIELDS} FROM campaign WHERE campaign.resource_name = {literal(name)}",  # nosec B608
     )
     if len(rows) != 1 or rows[0].get("campaign", {}).get("resourceName") != name:
         raise AdsError("resource_not_found", "The selected campaign is unavailable.")
@@ -150,7 +157,7 @@ def group_row(ctx, send, name):
     rows, _ = search(
         ctx,
         send,
-        f"SELECT {GROUP_FIELDS} FROM ad_group WHERE ad_group.resource_name = {literal(name)}",
+        f"SELECT {GROUP_FIELDS} FROM ad_group WHERE ad_group.resource_name = {literal(name)}",  # nosec B608
     )
     if len(rows) != 1 or rows[0].get("adGroup", {}).get("resourceName") != name:
         raise AdsError("resource_not_found", "The selected ad group is unavailable.")
@@ -314,12 +321,12 @@ def handle_read(ctx, send):
             if key in v:
                 filters.append(field + " IN (" + ", ".join(literal(x) for x in v[key]) + ")")
         where = " WHERE " + " AND ".join(filters) if filters else ""
-        queries = [f"SELECT {CAMPAIGN_FIELDS} FROM campaign{where} ORDER BY campaign.id"]
+        queries = [f"SELECT {CAMPAIGN_FIELDS} FROM campaign{where} ORDER BY campaign.id"]  # nosec B608
         project = campaign_summary
     elif ctx.operation == "list_ad_groups":
         campaign_row(ctx, send, v["campaign"])
         queries = [
-            f"SELECT {GROUP_FIELDS} FROM ad_group WHERE campaign.resource_name = {literal(v['campaign'])} ORDER BY ad_group.id"
+            f"SELECT {GROUP_FIELDS} FROM ad_group WHERE campaign.resource_name = {literal(v['campaign'])} ORDER BY ad_group.id"  # nosec B608
         ]
         project = group_summary
         extras["currency_code"] = account["currency_code"]
@@ -332,17 +339,17 @@ def handle_read(ctx, send):
             condition = "ad_group.resource_name = " + literal(v["ad_group"])
         if ctx.operation == "list_ads":
             queries = [
-                f"SELECT {AD_FIELDS} FROM ad_group_ad WHERE {condition} ORDER BY ad_group_ad.ad.id"
+                f"SELECT {AD_FIELDS} FROM ad_group_ad WHERE {condition} ORDER BY ad_group_ad.ad.id"  # nosec B608
             ]
             project = ad_summary
         else:
             queries = [
-                f"SELECT {KEYWORD_FIELDS} FROM ad_group_criterion WHERE {condition} AND ad_group_criterion.type = 'KEYWORD' ORDER BY ad_group_criterion.criterion_id"
+                f"SELECT {KEYWORD_FIELDS} FROM ad_group_criterion WHERE {condition} AND ad_group_criterion.type = 'KEYWORD' ORDER BY ad_group_criterion.criterion_id"  # nosec B608
             ]
             if "campaign" in v:
                 fields = "campaign.resource_name, campaign_criterion.resource_name, campaign_criterion.keyword.text, campaign_criterion.keyword.match_type, campaign_criterion.status, campaign_criterion.negative"
                 queries.append(
-                    f"SELECT {fields} FROM campaign_criterion WHERE {condition} AND campaign_criterion.type = 'KEYWORD' ORDER BY campaign_criterion.criterion_id"
+                    f"SELECT {fields} FROM campaign_criterion WHERE {condition} AND campaign_criterion.type = 'KEYWORD' ORDER BY campaign_criterion.criterion_id"  # nosec B608
                 )
             project = keyword_summary
             extras["currency_code"] = account["currency_code"]
@@ -359,7 +366,7 @@ def handle_read(ctx, send):
             "network_settings": networks(c),
         }
         queries = [
-            f"SELECT {CRITERION_FIELDS} FROM campaign_criterion WHERE campaign_criterion.campaign = {literal(v['campaign'])} AND campaign_criterion.type IN ('LOCATION', 'AD_SCHEDULE', 'LANGUAGE') ORDER BY campaign_criterion.criterion_id"
+            f"SELECT {CRITERION_FIELDS} FROM campaign_criterion WHERE campaign_criterion.campaign = {literal(v['campaign'])} AND campaign_criterion.type IN ('LOCATION', 'AD_SCHEDULE', 'LANGUAGE') ORDER BY campaign_criterion.criterion_id"  # nosec B608
         ]
         project = targeting_summary
     items, cursor, truncated = paged(ctx, send, queries, project)

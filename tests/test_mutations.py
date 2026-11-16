@@ -246,3 +246,13 @@ def test_mutable_response_may_omit_output_only_metadata(name):
 
     response = dispatch(fixture(name), transport=MutableOnly())
     assert response["ok"] is True, response
+
+
+def test_unshared_budget_accepts_protojson_omitted_false_flag():
+    from google_ads.runtime import dispatch
+
+    provider = Mutator()
+    provider.budget.pop("explicitlyShared")
+    response = dispatch(fixture("update_campaign_budget"), transport=provider)
+    assert response["ok"], response
+    assert response["result"]["explicitly_shared"] is False

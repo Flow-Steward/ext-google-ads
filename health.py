@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """flowsteward.google-ads extension health check."""
+
 from __future__ import annotations
 
 import importlib.util

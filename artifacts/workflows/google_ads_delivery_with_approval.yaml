@@ -1,0 +1,146 @@
+workflow_id: google_ads_delivery_with_approval
+version: 1.0.0
+display_name: Google Ads Delivery With Approval
+description: Review saved customer/resource/status, then change only the selected
+  object. Enable ads and groups separately before the campaign when launching; ENABLED
+  does not guarantee serving.
+enabled: false
+trigger:
+  confidence_threshold: 0.0
+settings:
+  connection_slots:
+  - slot: client
+    extension_id: flowsteward.google-ads
+    connection_type_ids:
+    - google_ads_account
+    label: Client
+  execution_graph:
+    schema_version: 1
+    entry:
+      kind: step
+      id: save_inputs
+    edges:
+    - source:
+        kind: step
+        id: save_inputs
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: approve_delivery
+      rework: false
+    - source:
+        kind: step
+        id: approve_delivery
+      outcome:
+        name: approved
+      target:
+        kind: step
+        id: change_status
+      rework: false
+    - source:
+        kind: step
+        id: approve_delivery
+      outcome:
+        name: rejected
+      target:
+        kind: step
+        id: rejected
+      rework: false
+    - source:
+        kind: step
+        id: change_status
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: done
+      rework: false
+  policies:
+    branch_strategy: none
+  callable:
+    enabled: true
+    trigger_channels:
+    - ui
+    - api
+    - mcp
+    - parent_workflow
+    input_mode: fields
+    strict_inputs: true
+    expected_inputs:
+    - name: delivery_input
+      type: object
+      required: true
+      description: Complete set_delivery_status input with expected customer/MCC assertions.
+    output_mode: variables
+    expected_outputs:
+    - name: delivery
+      type: object
+      required: false
+      description: Actual selected resource status and delivery notes.
+    expected_artifacts: []
+    side_effects:
+    - external_write
+builder_metadata_jsonb:
+  purpose: Review saved customer/resource/status, then change only the selected object.
+    Enable ads and groups separately before the campaign when launching; ENABLED does
+    not guarantee serving.
+  use_cases:
+  - Google Ads agency workflows
+  anti_use_cases:
+  - Bypass project OAuth or host external-effect authorization
+  composition_role: ads_workflow
+  determinism_level: external_api
+  safe_for_auto_use: false
+tags:
+- google-ads
+- agency
+steps:
+- step_id: save_inputs
+  display_name: Save exact selected resource and requested status
+  step_kind: set_variable
+  override:
+    set_variable:
+      assignments:
+        state.ads_delivery_input:
+          source: state.inputs.delivery_input
+- step_id: approve_delivery
+  display_name: Review customer and exact saved inputs
+  step_kind: approval
+  override:
+    approval:
+      show_outputs:
+      - state.ads_delivery_input
+- step_id: change_status
+  display_name: Set delivery status
+  step_kind: connector
+  connector_id: extension.flowsteward.google-ads
+  connection_binding_jsonb:
+    slot: client
+  override:
+    connector:
+      extension_id: flowsteward.google-ads
+      operation_id: set_delivery_status
+      action_id: set_delivery_status
+  input_mapping_jsonb:
+    expected_customer_id: state.ads_delivery_input.expected_customer_id
+    expected_login_customer_id: state.ads_delivery_input.expected_login_customer_id
+    resource_type: state.ads_delivery_input.resource_type
+    resource_name: state.ads_delivery_input.resource_name
+    status: state.ads_delivery_input.status
+  output_mapping_jsonb:
+    result: state.delivery
+- step_id: done
+  display_name: Complete
+  step_kind: stop_success
+  override:
+    stop_success:
+      message: Google Ads workflow completed; inspect actual statuses and delivery
+        constraints.
+- step_id: rejected
+  display_name: Stopped
+  step_kind: stop_fail
+  override:
+    stop_fail:
+      message: Operator rejected this change.
+groups: []

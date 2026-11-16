@@ -1,0 +1,33 @@
+ext.display_name: Google Ads
+ext.description: Search advertising across project connections.
+page.setup.title: Google Ads setup
+component.authorize_google.title: Authorize Google
+component.select_ads_customer.title: Configure the advertising account
+component.compatibility_notes.title: Connection setup
+component.ads_operating_help.title: Advertising and access
+op.verify_google_identity.display_name: Verify google identity
+op.list_accessible_accounts.display_name: List accessible accounts
+op.list_manager_clients.display_name: List manager clients
+op.bind_ads_account.display_name: Bind ads account
+op.get_account.display_name: Get account
+op.list_campaigns.display_name: List campaigns
+op.get_campaign.display_name: Get campaign
+op.list_ad_groups.display_name: List ad groups
+op.list_ads.display_name: List ads
+op.list_keywords.display_name: List keywords
+op.list_targeting.display_name: List targeting
+op.validate_search_campaign.display_name: Validate search campaign
+op.create_search_campaign.display_name: Create search campaign
+op.update_campaign.display_name: Update campaign
+op.update_campaign_budget.display_name: Update campaign budget
+op.update_bidding.display_name: Update bidding
+op.create_ad_group.display_name: Create ad group
+op.update_ad_group.display_name: Update ad group
+op.create_responsive_search_ad.display_name: Create responsive search ad
+op.update_responsive_search_ad.display_name: Update responsive search ad
+op.set_delivery_status.display_name: Set delivery status
+op.upsert_keywords.display_name: Upsert keywords
+op.remove_keywords.display_name: Remove keywords
+op.upsert_negative_keywords.display_name: Upsert negative keywords
+op.set_campaign_targeting.display_name: Set campaign targeting
+op.get_performance_report.display_name: Get performance report

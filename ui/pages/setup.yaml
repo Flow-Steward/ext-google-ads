@@ -12,8 +12,9 @@ components:
 - component_id: select_ads_customer
   type: connection_form
   title: Configure the advertising account
-  description: Authorize first, select that connection, save customer/MCC, then check it. Save without a selected
-    row may create an unfinished connection; it cannot run Ads actions until OAuth and account setup are complete.
+  description: Authorize first, select that connection, save customer/MCC, then check
+    it. Save without a selected row may create an unfinished connection; it cannot
+    run Ads actions until OAuth and account setup are complete.
   fields:
   - field_id: customer_id
     path: customer_id
@@ -35,10 +36,24 @@ components:
 - component_id: compatibility_notes
   type: markdown
   title: Connection setup
-  body: Authorize first, select that connection in the account form, save customer/MCC, then check it. An unfinished
-    connection without OAuth cannot run Ads actions. Finish setup before starting workflows; prefer a separate connection
-    for another client. Saving settings while authorization is being refreshed may require reconnecting; avoiding
-    edits during active use reduces this risk but does not eliminate it. If authorization is lost, reconnect using
-    the standard flow. Revoking Google access may also disconnect this Google user from other connections using
-    the same Cloud project. Read the resource lists, then enter the campaign or ad group resource name or map it
-    from a previous workflow step. A failed read must be resolved before continuing.
+  body: Authorize first, select that connection in the account form, save customer/MCC,
+    then check it. An unfinished connection without OAuth cannot run Ads actions.
+    Finish setup before starting workflows; prefer a separate connection for another
+    client. Saving settings while authorization is being refreshed may require reconnecting;
+    avoiding edits during active use reduces this risk but does not eliminate it.
+    If authorization is lost, reconnect using the standard flow. Revoking Google access
+    may also disconnect this Google user from other connections using the same Cloud
+    project. Read the resource lists, then enter the campaign or ad group resource
+    name or map it from a previous workflow step. A failed read must be resolved before
+    continuing.
+- component_id: ads_operating_help
+  type: markdown
+  title: Advertising and access
+  body: 'Check Cloud-project access for test versus production customers. No developer
+    token is needed. If Google requires political advertising declarations, complete
+    them in Google Ads before retrying. New campaign, group and ad objects are PAUSED.
+    ENABLED does not guarantee serving: parent status, review, billing and account
+    restrictions still apply. Daily budgets are average daily budgets rather than
+    hard billing caps. After an unknown write outcome, use the existing recovery path
+    and reconcile provider state; do not repeat creation blindly. Reports explicitly
+    indicate when limits require a narrower request.'

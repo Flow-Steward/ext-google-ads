@@ -32,3 +32,18 @@ runtime:
     connection_types: contracts/connection_types.yaml
     operation_manifest: contracts/operation_manifest.yaml
     step_ui_manifest: contracts/step_ui_manifest.yaml
+artifacts:
+  extensions:
+  - extension_id: flowsteward.google-ads
+    ref: extension.yaml
+    publish: true
+  workflows:
+  - workflow_id: google_ads_create_paused_search
+    ref: artifacts/workflows/google_ads_create_paused_search.yaml
+    publish: true
+  - workflow_id: google_ads_delivery_with_approval
+    ref: artifacts/workflows/google_ads_delivery_with_approval.yaml
+    publish: true
+  - workflow_id: google_ads_two_client_reports
+    ref: artifacts/workflows/google_ads_two_client_reports.yaml
+    publish: true

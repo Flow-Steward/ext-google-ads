@@ -1,8 +1,10 @@
 """OpenID identity and actual bound account metadata; never saved as authority."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 import re
 import time
-import random
+import secrets
 from .context import Context
 from .transport import WireRequest
 from .errors import AdsError
@@ -39,7 +41,7 @@ def call(ctx: Context, send, path: str, body=None, *, customer: str | None = Non
         except AdsError as error:
             if write or not error.retryable or attempt == 2:
                 raise
-            delay = max(error.retry_after or 0, 0.25 * (2**attempt)) + random.uniform(0, 0.1)
+            delay = max(error.retry_after or 0, 0.25 * (2**attempt)) + secrets.randbelow(101) / 1000
             if time.monotonic() + delay >= ctx.deadline:
                 raise AdsError(
                     "timeout", "The read retry would exceed its operation deadline."
@@ -58,7 +60,7 @@ def get_account(ctx: Context, send, *, allow_manager: bool = False) -> dict:
         ctx,
         send,
         f"customers/{ctx.customer}/googleAds:searchStream",
-        {"query": f"SELECT {fields} FROM customer LIMIT 1"},
+        {"query": f"SELECT {fields} FROM customer LIMIT 1"},  # nosec B608
     )
     batches = reply.body
     if not isinstance(batches, list):

@@ -54,7 +54,55 @@ health:
   timeout_seconds: 5
 ui_manifest: ui/ui_manifest.yaml
 action_manifest: ui/actions/actions.yaml
-python_requirements: []
+python_requirements:
+- name: attrs
+  version: 26.1.0
+  hashes:
+  - sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309
+- name: cffi
+  version: 2.1.0
+  hashes:
+  - sha256:1e9f50d192a3e525b15a75ab5114e442d83d657b7ec29182a991bc9a88fd3a66
+  - sha256:b6422532152adf4e59b110cb2808cee7a033800952f5c036b4af047ee43199e7
+- name: cryptography
+  version: 50.0.0
+  hashes:
+  - sha256:06a32a980526a6ab9a4b9bf8f7385800791e2bb960903cb6b530e4817509a3b7
+  - sha256:fd9192b7b70c573d7f214eb1ae35e00d359f6f5e4b27c7e21e30de1fc6204645
+- name: flowsteward-extension-sdk
+  version: 0.5.0
+  hashes:
+  - sha256:af0d702748e1ec38ca714df39c3b4accfb69b6ac28652268dd7dcc8fdded593f
+- name: jsonschema
+  version: 4.26.0
+  hashes:
+  - sha256:d489f15263b8d200f8387e64b4c3a75f06629559fb73deb8fdfb525f2dab50ce
+- name: jsonschema-specifications
+  version: 2025.9.1
+  hashes:
+  - sha256:98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe
+- name: pycparser
+  version: '3.0'
+  hashes:
+  - sha256:b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992
+- name: pyyaml
+  version: 6.0.3
+  hashes:
+  - sha256:9149cad251584d5fb4981be1ecde53a1ca46c891a79788c0df828d2f166bda28
+  - sha256:ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc
+- name: referencing
+  version: 0.37.0
+  hashes:
+  - sha256:381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231
+- name: rpds-py
+  version: 0.30.0
+  hashes:
+  - sha256:47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23
+  - sha256:ca28829ae5f5d569bb62a79512c842a03a12576375d5ece7d2cadf8abe96ec28
+- name: typing-extensions
+  version: 4.16.0
+  hashes:
+  - sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8
 account_scope:
   scope_type: project
   description: One project-scoped OAuth connection per customer/MCC route.

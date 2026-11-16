@@ -165,3 +165,49 @@ def test_targeting_timeout_never_retries():
     response = dispatch(fixture("set_campaign_targeting"), transport=provider)
     assert response["error_code"] == "outcome_unknown"
     assert len(provider.writes) == 1
+
+
+def test_set_first_geo_target_from_empty_provider_snapshot():
+    from google_ads.runtime import dispatch
+
+    provider = Targets()
+    provider.criteria = [provider.criteria[1]]
+    p = fixture("set_campaign_targeting")
+    p["action"]["input"].update(
+        expected_current={"geo_target_constants": []},
+        desired={"geo_target_constants": ["geoTargetConstants/2440"]},
+    )
+    response = dispatch(p, transport=provider)
+    assert response["ok"], response
+    assert response["result"]["previous"]["geo_target_constants"] == []
+    assert len(provider.writes[0].body["mutateOperations"]) == 1
+
+
+def test_schedule_reset_removes_protojson_omitted_zero_fields():
+    from google_ads.runtime import dispatch
+
+    provider = Targets()
+    provider.criteria.append(
+        {
+            "campaignCriterion": {
+                "resourceName": "customers/1234567890/campaignCriteria/1001~6003",
+                "type": "AD_SCHEDULE",
+                "status": "ENABLED",
+                "adSchedule": {"dayOfWeek": "MONDAY", "endHour": 1},
+            }
+        }
+    )
+    weekly = {
+        "mode": "weekly",
+        "intervals": [
+            {"day": "MONDAY", "start_hour": 0, "start_minute": 0, "end_hour": 1, "end_minute": 0}
+        ],
+    }
+    p = fixture("set_campaign_targeting")
+    p["action"]["input"].update(
+        expected_current={"schedule": weekly}, desired={"schedule": {"mode": "all_time"}}
+    )
+    response = dispatch(p, transport=provider)
+    assert response["ok"], response
+    assert response["result"]["current"]["schedule"] == {"mode": "all_time"}
+    assert len(provider.writes[0].body["mutateOperations"]) == 1

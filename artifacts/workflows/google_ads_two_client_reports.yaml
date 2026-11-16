@@ -1,0 +1,129 @@
+workflow_id: google_ads_two_client_reports
+version: 1.0.0
+display_name: Google Ads Two Client Reports
+description: Read the same bounded report from two explicitly selected project connection
+  slots. Outputs retain each actual customer/connection identity and currency; do
+  not sum different currencies.
+enabled: false
+trigger:
+  confidence_threshold: 0.0
+settings:
+  connection_slots:
+  - slot: client_a
+    extension_id: flowsteward.google-ads
+    connection_type_ids:
+    - google_ads_account
+    label: Client A
+  - slot: client_b
+    extension_id: flowsteward.google-ads
+    connection_type_ids:
+    - google_ads_account
+    label: Client B
+  execution_graph:
+    schema_version: 1
+    entry:
+      kind: step
+      id: report_a
+    edges:
+    - source:
+        kind: step
+        id: report_a
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: report_b
+      rework: false
+    - source:
+        kind: step
+        id: report_b
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: done
+      rework: false
+  policies:
+    branch_strategy: none
+  callable:
+    enabled: true
+    trigger_channels:
+    - ui
+    - api
+    - mcp
+    - parent_workflow
+    input_mode: fields
+    strict_inputs: true
+    expected_inputs:
+    - name: report_input
+      type: object
+      required: true
+      description: Complete get_performance_report input; dates use each account timezone.
+    output_mode: variables
+    expected_outputs:
+    - name: client_a_report
+      type: object
+      required: false
+      description: First selected client report.
+    - name: client_b_report
+      type: object
+      required: false
+      description: Second selected client report.
+    expected_artifacts: []
+    side_effects: []
+builder_metadata_jsonb:
+  purpose: Read the same bounded report from two explicitly selected project connection
+    slots. Outputs retain each actual customer/connection identity and currency; do
+    not sum different currencies.
+  use_cases:
+  - Google Ads agency workflows
+  anti_use_cases:
+  - Bypass project OAuth or host external-effect authorization
+  composition_role: ads_workflow
+  determinism_level: external_api
+  safe_for_auto_use: false
+tags:
+- google-ads
+- agency
+steps:
+- step_id: report_a
+  display_name: Get performance report
+  step_kind: connector
+  connector_id: extension.flowsteward.google-ads
+  connection_binding_jsonb:
+    slot: client_a
+  override:
+    connector:
+      extension_id: flowsteward.google-ads
+      operation_id: get_performance_report
+      action_id: get_performance_report
+  input_mapping_jsonb: &id001
+    report_type: state.inputs.report_input.report_type
+    start_date: state.inputs.report_input.start_date
+    end_date: state.inputs.report_input.end_date
+    dimensions: state.inputs.report_input.dimensions
+    metrics: state.inputs.report_input.metrics
+  output_mapping_jsonb:
+    result: state.client_a_report
+- step_id: report_b
+  display_name: Get performance report
+  step_kind: connector
+  connector_id: extension.flowsteward.google-ads
+  connection_binding_jsonb:
+    slot: client_b
+  override:
+    connector:
+      extension_id: flowsteward.google-ads
+      operation_id: get_performance_report
+      action_id: get_performance_report
+  input_mapping_jsonb: *id001
+  output_mapping_jsonb:
+    result: state.client_b_report
+- step_id: done
+  display_name: Complete
+  step_kind: stop_success
+  override:
+    stop_success:
+      message: Google Ads workflow completed; inspect actual statuses and delivery
+        constraints.
+groups: []

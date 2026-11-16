@@ -1,5 +1,7 @@
 """Bounded atomic positive/negative keyword ensures and explicit removals."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 from copy import deepcopy
 from .accounts import get_account
 from .reads import base, resource, literal, KEYWORD_FIELDS
@@ -39,7 +41,7 @@ def execute(ctx, send):
     rows = complete_rows(
         ctx,
         send,
-        f"SELECT {fields} FROM {field} WHERE {field}.{parent_field} = {literal(parent)} AND {field}.type = 'KEYWORD'",
+        f"SELECT {fields} FROM {field} WHERE {field}.{parent_field} = {literal(parent)} AND {field}.type = 'KEYWORD'",  # nosec B608
     )
     existing = {}
     for row in rows:
@@ -160,7 +162,9 @@ def remove(ctx, send):
         field = "ad_group_criterion" if ag else "campaign_criterion"
         fields = KEYWORD_FIELDS if ag else CAMPAIGN_KEYWORD_FIELDS
         rows = complete_rows(
-            ctx, send, f"SELECT {fields} FROM {field} WHERE {field}.resource_name = {literal(name)}"
+            ctx,
+            send,
+            f"SELECT {fields} FROM {field} WHERE {field}.resource_name = {literal(name)}",  # nosec B608
         )
         if len(rows) != 1 or rows[0].get(entity, {}).get("resourceName") != name:
             raise AdsError("resource_not_found", "The selected keyword criterion is unavailable.")

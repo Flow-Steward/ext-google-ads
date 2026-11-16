@@ -1,10 +1,12 @@
 """Compare only explicitly managed families and mutate one atomic diff."""
 
+# GAQL uses closed field/source constants and resource literals escaped by reads.literal.
+
 import json
 from copy import deepcopy
 from .accounts import get_account
 from .reads import base, literal, CRITERION_FIELDS, campaign_row
-from .mutations_common import campaign, complete_rows, atomic, update, conflict, unsupported
+from .mutations_common import campaign, complete_rows, atomic, update, conflict
 from .validation import schedule, schedule_wire, reject
 
 
@@ -32,7 +34,7 @@ def snapshot(ctx, send, name, families):
     rows = complete_rows(
         ctx,
         send,
-        f"SELECT {CRITERION_FIELDS} FROM campaign_criterion WHERE campaign_criterion.campaign = {literal(name)} AND campaign_criterion.type IN ('LOCATION', 'AD_SCHEDULE') AND campaign_criterion.status != 'REMOVED'",
+        f"SELECT {CRITERION_FIELDS} FROM campaign_criterion WHERE campaign_criterion.campaign = {literal(name)} AND campaign_criterion.type IN ('LOCATION', 'AD_SCHEDULE') AND campaign_criterion.status != 'REMOVED'",  # nosec B608
     )
     criteria = []
     value = {}
@@ -57,14 +59,13 @@ def snapshot(ctx, send, name, families):
                     "end_minute": minute[s.get("endMinute", "ZERO")],
                 }
             )
+            # ProtoJSON may omit zero-valued schedule scalars; compare canonical wire values.
+            item = deepcopy(item)
+            item["adSchedule"] = schedule_wire(intervals[-1])
             criteria.append(item)
     if "geo_target_constants" in families:
         if len(set(geo)) != len(geo):
             conflict("Duplicate geo criteria require resolution before this update.")
-        if not geo:
-            unsupported(
-                "An account-wide empty geo snapshot is outside the V1 nonempty geo contract."
-            )
         value["geo_target_constants"] = geo
     if "schedule" in families:
         value["schedule"] = (

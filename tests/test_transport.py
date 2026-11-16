@@ -83,3 +83,16 @@ def test_timeout_retains_unknown_write_truth(monkeypatch, write, expected):
     assert e.value.code == expected
     assert e.value.unknown is write
     assert "sensitive" not in str(e.value)
+
+
+def test_wire_fractional_metrics_are_parsed_without_binary_float(monkeypatch):
+    from decimal import Decimal
+    import google_ads.transport as mod
+
+    monkeypatch.setattr(
+        mod,
+        "open_pinned_url",
+        lambda *a, **k: io.BytesIO(b'{"metrics":{"conversions":0.1234567890123456789}}'),
+    )
+    reply = mod.PinnedTransport()(request())
+    assert reply.body["metrics"]["conversions"] == Decimal("0.1234567890123456789")

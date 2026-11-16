@@ -54,7 +54,7 @@ success:
         cpc_bid_ceiling_micros: '2000000'
       currency_code: EUR
       update_mask:
-      - target_spend
+      - target_spend.cpc_bid_ceiling_micros
     external_effect_status: succeeded
     definitely_no_external_effect: false
 error:

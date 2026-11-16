@@ -7,6 +7,11 @@ from .errors import AdsError
 from .transport import PinnedTransport
 from .reads import READS, handle_read
 from .search_create import execute as search_create
+from .mutations import MUTATIONS, execute as mutate
+from .rsa import RSA, execute as mutate_rsa
+from .keywords import KEYWORDS, execute as mutate_keywords
+from .targeting import execute as mutate_targeting
+from .reports import execute as report
 
 
 def dispatch(payload: dict, *, transport=None) -> dict:
@@ -31,6 +36,16 @@ def dispatch(payload: dict, *, transport=None) -> dict:
             result = get_account(ctx, send)
         elif ctx.operation in {"create_search_campaign", "validate_search_campaign"}:
             result = search_create(ctx, send)
+        elif ctx.operation in MUTATIONS:
+            result = mutate(ctx, send)
+        elif ctx.operation in RSA:
+            result = mutate_rsa(ctx, send)
+        elif ctx.operation in KEYWORDS:
+            result = mutate_keywords(ctx, send)
+        elif ctx.operation == "set_campaign_targeting":
+            result = mutate_targeting(ctx, send)
+        elif ctx.operation == "get_performance_report":
+            result = report(ctx, send)
         elif ctx.operation in READS:
             result = handle_read(ctx, send)
         else:

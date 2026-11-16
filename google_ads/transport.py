@@ -3,6 +3,7 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 import json
+from decimal import Decimal
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from flowsteward_extension_sdk import Request, open_pinned_url
@@ -59,7 +60,7 @@ class PinnedTransport:
                         "The provider response exceeds the safe limit.",
                         unknown=request.write,
                     )
-                result = json.loads(raw)
+                result = json.loads(raw, parse_float=Decimal)
                 headers = getattr(response, "headers", {})
                 return Reply(result, request_id(headers.get("request-id")))
         except AdsError:

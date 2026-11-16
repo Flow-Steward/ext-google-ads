@@ -2,6 +2,7 @@
 
 import re
 import time
+import random
 from .context import Context
 from .transport import WireRequest
 from .errors import AdsError
@@ -11,9 +12,6 @@ BASE_URL = "https://googleads.googleapis.com/v26"
 
 
 def call(ctx: Context, send, path: str, body=None, *, customer: str | None = None, write=False):
-    left = ctx.deadline - time.monotonic()
-    if left <= 0:
-        raise AdsError("timeout", "The operation deadline expired before dispatch.")
     headers = {
         "Authorization": f"Bearer {ctx.token}",
         "Accept": "application/json",
@@ -21,21 +19,37 @@ def call(ctx: Context, send, path: str, body=None, *, customer: str | None = Non
     }
     if ctx.manager:
         headers["login-customer-id"] = ctx.manager
-    if write:
-        ctx.effect_status = "sent_unknown"
-    reply = send(
-        WireRequest(
-            "GET" if body is None else "POST",
-            f"{BASE_URL}/{path}",
-            headers,
-            body,
-            min(15.0, left),
-            write,
-        )
-    )
-    if write:
-        ctx.effect_status = "confirmed"
-    return reply
+    for attempt in range(3):
+        left = ctx.deadline - time.monotonic()
+        if left <= 0:
+            raise AdsError("timeout", "The operation deadline expired before dispatch.")
+        if write:
+            ctx.effect_status = "sent_unknown"
+        try:
+            reply = send(
+                WireRequest(
+                    "GET" if body is None else "POST",
+                    f"{BASE_URL}/{path}",
+                    headers,
+                    body,
+                    min(15.0, left),
+                    write,
+                )
+            )
+        except AdsError as error:
+            if write or not error.retryable or attempt == 2:
+                raise
+            delay = max(error.retry_after or 0, 0.25 * (2**attempt)) + random.uniform(0, 0.1)
+            if time.monotonic() + delay >= ctx.deadline:
+                raise AdsError(
+                    "timeout", "The read retry would exceed its operation deadline."
+                ) from None
+            time.sleep(delay)
+            continue
+        if write:
+            ctx.effect_status = "confirmed"
+        return reply
+    raise AdsError("timeout", "The bounded read retries were exhausted.")
 
 
 def get_account(ctx: Context, send, *, allow_manager: bool = False) -> dict:

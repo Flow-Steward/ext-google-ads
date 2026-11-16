@@ -7,6 +7,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlsplit
 from flowsteward_extension_sdk import Request, open_pinned_url
 from .errors import AdsError
+from .provider_errors import provider_failure, request_id
 
 
 @dataclass(frozen=True)
@@ -60,27 +61,16 @@ class PinnedTransport:
                     )
                 result = json.loads(raw)
                 headers = getattr(response, "headers", {})
-                return Reply(result, headers.get("request-id"))
+                return Reply(result, request_id(headers.get("request-id")))
         except AdsError:
             raise
         except HTTPError as exc:
-            if request.write and exc.code >= 500:
-                raise AdsError(
-                    "outcome_unknown",
-                    "The provider write outcome is unknown; do not repeat it automatically.",
-                    unknown=True,
-                ) from None
-            code = {
-                401: "authorization_required",
-                403: "permission_denied",
-                404: "resource_not_found",
-                429: "rate_limited",
-            }.get(exc.code, "validation_failed" if exc.code < 500 else "provider_unavailable")
-            raise AdsError(
-                code,
-                "Google refused the request; review access, configuration and quotas.",
-                retryable=not request.write and exc.code in {429, 500, 502, 503, 504},
-            ) from None
+            try:
+                raw = exc.read(65537)
+                error = provider_failure(exc.code, raw, exc.headers or {}, write=request.write)
+            finally:
+                exc.close()
+            raise error from None
         except (TimeoutError, OSError, URLError, ValueError):
             raise AdsError(
                 "outcome_unknown" if request.write else "timeout",

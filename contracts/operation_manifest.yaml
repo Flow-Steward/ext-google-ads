@@ -81,7 +81,7 @@ operations:
   description: Google Ads V1 list_accessible_accounts; selected project connection
     only.
   operation_kind: action
-  workflow_visible: false
+  workflow_visible: true
   connection_type_ids:
   - google_ads_account
   required_oauth_scopes:
@@ -173,10 +173,27 @@ operations:
               code:
                 type: string
                 enum:
+                - invalid_payload
+                - invalid_host_envelope
+                - invalid_connection
+                - authorization_required
                 - permission_denied
-                - not_found
+                - account_not_bound
+                - account_access_lost
+                - production_access_required
+                - resource_not_found
+                - resource_account_mismatch
+                - unsupported_configuration
+                - validation_failed
+                - policy_violation
+                - state_conflict
                 - rate_limited
-                - provider_error
+                - quota_exceeded
+                - provider_unavailable
+                - timeout
+                - outcome_unknown
+                - internal_error
+                - external_effect_claim_required
               message:
                 type: string
                 minLength: 1
@@ -241,7 +258,7 @@ operations:
   display_name: List manager clients
   description: Google Ads V1 list_manager_clients; selected project connection only.
   operation_kind: action
-  workflow_visible: false
+  workflow_visible: true
   connection_type_ids:
   - google_ads_account
   required_oauth_scopes:

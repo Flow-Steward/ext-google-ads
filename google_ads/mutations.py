@@ -110,14 +110,19 @@ def execute(ctx, send):
             if k in applied:
                 applied[k] = actual[fields[k]]
         if "network_settings" in applied:
+            # Optional mutable fields are not a complete account-state snapshot.
+            actual_network = campaign_row(ctx, send, campaign_name)["campaign"].get(
+                "networkSettings", {}
+            )
             applied["network_settings"] = {
-                k: actual["networkSettings"][
+                k: actual_network.get(
                     {
                         "target_google_search": "targetGoogleSearch",
                         "target_search_network": "targetSearchNetwork",
                         "target_content_network": "targetContentNetwork",
-                    }[k]
-                ]
+                    }[k],
+                    False,
+                )
                 for k in applied["network_settings"]
             }
         result = {

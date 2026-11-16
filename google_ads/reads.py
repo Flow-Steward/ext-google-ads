@@ -53,14 +53,17 @@ def resource(ctx, value, kind=None):
 
 
 def verify_refs(ctx, value):
+    # Check typed Google resource fields, never free text such as names or search terms.
+    resource_fields = {"resourceName", "campaign", "adGroup", "campaignBudget", "biddingStrategy"}
     if isinstance(value, dict):
-        for nested in value.values():
-            verify_refs(ctx, nested)
+        for key, nested in value.items():
+            if key in resource_fields and isinstance(nested, str) and nested:
+                resource(ctx, nested)
+            elif isinstance(nested, (dict, list)):
+                verify_refs(ctx, nested)
     elif isinstance(value, list):
         for nested in value:
             verify_refs(ctx, nested)
-    elif isinstance(value, str) and value.startswith("customers/"):
-        resource(ctx, value)
 
 
 def base(ctx):
@@ -170,13 +173,15 @@ def accessible(ctx, send):
     decode(ctx, binding)
     direct = replace(ctx, manager="")
     reply = call(direct, send, "customers:listAccessibleCustomers")
-    if not isinstance(reply.body, dict) or not isinstance(reply.body.get("resourceNames"), list):
+    if not isinstance(reply.body, dict) or not isinstance(
+        reply.body.get("resourceNames", []), list
+    ):
         raise AdsError("provider_unavailable", "Invalid account discovery response.")
-    names = reply.body["resourceNames"]
+    names = reply.body.get("resourceNames", [])
     if len(names) > 10000:
         names = names[:10000]
     selected, cursor, truncated = window(
-        ctx, binding, names, incomplete=len(reply.body["resourceNames"]) > 10000
+        ctx, binding, names, incomplete=len(reply.body.get("resourceNames", [])) > 10000
     )
     items = []
     for name in selected:
@@ -366,7 +371,7 @@ def handle_read(ctx, send):
             "network_settings": networks(c),
         }
         queries = [
-            f"SELECT {CRITERION_FIELDS} FROM campaign_criterion WHERE campaign_criterion.campaign = {literal(v['campaign'])} AND campaign_criterion.type IN ('LOCATION', 'AD_SCHEDULE', 'LANGUAGE') ORDER BY campaign_criterion.criterion_id"  # nosec B608
+            f"SELECT {CRITERION_FIELDS} FROM campaign_criterion WHERE campaign_criterion.campaign = {literal(v['campaign'])} AND campaign_criterion.type IN ('LOCATION', 'AD_SCHEDULE', 'LANGUAGE') AND campaign_criterion.status != 'REMOVED' ORDER BY campaign_criterion.criterion_id"  # nosec B608
         ]
         project = targeting_summary
     items, cursor, truncated = paged(ctx, send, queries, project)

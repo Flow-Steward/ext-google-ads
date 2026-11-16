@@ -1,0 +1,106 @@
+workflow_id: google_ads_read_list_targeting_continue
+version: 1.0.0
+display_name: Google Ads Read List Targeting Continue
+description: Read-only list_targeting through the standard host action and selected
+  project connection slot. Continue with a cursor from the same connection/query.
+enabled: false
+trigger:
+  confidence_threshold: 0.0
+settings:
+  connection_slots:
+  - slot: client
+    extension_id: flowsteward.google-ads
+    connection_type_ids:
+    - google_ads_account
+    label: Client
+  execution_graph:
+    schema_version: 1
+    entry:
+      kind: step
+      id: read
+    edges:
+    - source:
+        kind: step
+        id: read
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: done
+      rework: false
+  policies:
+    branch_strategy: none
+  callable:
+    enabled: true
+    trigger_channels:
+    - ui
+    - api
+    - mcp
+    - parent_workflow
+    input_mode: fields
+    strict_inputs: true
+    expected_inputs:
+    - name: campaign
+      type: text
+      required: true
+      description: Required campaign.
+    - name: page_size
+      type: number
+      required: false
+      description: Optional bounded page size; defaults to100.
+    - name: cursor
+      type: text
+      required: true
+      description: Required cursor.
+    output_mode: variables
+    expected_outputs:
+    - name: read_result
+      type: object
+      required: false
+      description: Actual scoped operation result; inspect next_cursor/truncated and
+        provider errors.
+    expected_artifacts: []
+    side_effects: []
+    allow_empty_inputs: false
+  traits:
+    google_ads: true
+    read_only: true
+builder_metadata_jsonb:
+  purpose: Read-only list_targeting through the standard host action and selected
+    project connection slot. Continue with a cursor from the same connection/query.
+  use_cases:
+  - Google Ads agency workflows
+  anti_use_cases:
+  - Bypass project OAuth or host external-effect authorization
+  composition_role: read_only_data_workflow
+  determinism_level: external_api
+  safe_for_auto_use: true
+tags:
+- google-ads
+- agency
+steps:
+- step_id: read
+  display_name: List targeting
+  step_kind: connector
+  connector_id: extension.flowsteward.google-ads
+  connection_binding_jsonb:
+    slot: client
+  override:
+    connector:
+      extension_id: flowsteward.google-ads
+      operation_id: list_targeting
+      action_id: list_targeting
+  input_mapping_jsonb:
+    campaign: state.inputs.campaign
+    page_size: state.inputs.page_size | default:100
+    cursor: state.inputs.cursor
+  output_mapping_jsonb:
+    result: state.read_result
+- step_id: done
+  display_name: Complete
+  step_kind: stop_success
+  override:
+    stop_success:
+      message: Google Ads workflow completed; inspect actual statuses and delivery
+        constraints.
+groups: []

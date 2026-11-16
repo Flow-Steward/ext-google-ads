@@ -28,9 +28,10 @@ Use existing approval/manual autonomy for activation, budget/bidding, active-con
 
 - `google_ads_create_paused_search`: save exact customer/specification, validate, review, then create PAUSED structure.
 - `google_ads_delivery_with_approval`: review and change only one selected resource's status; parents and siblings remain untouched.
+- `google_ads_targeting_with_approval`: read current targeting, verify retained expected state, compute/save a deterministic diff, review, then write the same input. A complete single page (up to1000 current criteria) is required; incomplete snapshots stop before approval. Larger snapshots require existing pagination composition before review.
 - `google_ads_two_client_reports`: two independently selected project connection slots; each result retains actual customer/connection/currency identity.
 
-Templates install disabled and must be configured for a project before enabling. They contain no account IDs or credentials. Direct agent read-tool OAuth hydration remains a compatibility gap pending disposition; the named-action implementations are available independently. No raw `invoke_tool` alias is accepted, especially for writes.
+Templates install disabled and must be configured for a project before enabling. They contain no account IDs or credentials. For V1 the approved agent read path uses the included `google_ads_read_*` callable workflows, whose connector steps receive the host-selected OAuth connection. Initial/continuation variants preserve paging; ad/keyword variants select campaign or ad-group scope; campaign filtered variants require both filter arrays. OAuth identity callback and account setup bind remain operator-only. Configure and enable these draft workflows in the intended project before agents use them. No raw `invoke_tool` alias is accepted, especially for writes.
 
 ## Reports and operational errors
 
@@ -41,3 +42,5 @@ Resolve Cloud-project production-access errors in Google Cloud/Ads access settin
 ## Development
 
 See [PUBLISHING.md](PUBLISHING.md) for exact-target Docker gates, offline wheels and clean-stage packaging. [BRANDING.md](BRANDING.md) records the unchanged official Google asset source. Synthetic envelope examples deliberately omit access tokens and do not confer host authority.
+
+Russian locale currently translates some headings; operation names and several labels/help paragraphs use English fallback. Full Russian localization remains deferred.

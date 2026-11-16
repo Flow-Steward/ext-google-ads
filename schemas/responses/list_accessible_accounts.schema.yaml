@@ -69,10 +69,27 @@ oneOf:
                   code:
                     type: string
                     enum:
+                    - invalid_payload
+                    - invalid_host_envelope
+                    - invalid_connection
+                    - authorization_required
                     - permission_denied
-                    - not_found
+                    - account_not_bound
+                    - account_access_lost
+                    - production_access_required
+                    - resource_not_found
+                    - resource_account_mismatch
+                    - unsupported_configuration
+                    - validation_failed
+                    - policy_violation
+                    - state_conflict
                     - rate_limited
-                    - provider_error
+                    - quota_exceeded
+                    - provider_unavailable
+                    - timeout
+                    - outcome_unknown
+                    - internal_error
+                    - external_effect_claim_required
                   message:
                     type: string
                     minLength: 1

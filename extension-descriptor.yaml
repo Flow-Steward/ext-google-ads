@@ -44,6 +44,81 @@ artifacts:
   - workflow_id: google_ads_delivery_with_approval
     ref: artifacts/workflows/google_ads_delivery_with_approval.yaml
     publish: true
+  - workflow_id: google_ads_read_get_account
+    ref: artifacts/workflows/google_ads_read_get_account.yaml
+    publish: true
+  - workflow_id: google_ads_read_get_campaign
+    ref: artifacts/workflows/google_ads_read_get_campaign.yaml
+    publish: true
+  - workflow_id: google_ads_read_get_performance_report
+    ref: artifacts/workflows/google_ads_read_get_performance_report.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_accessible_accounts
+    ref: artifacts/workflows/google_ads_read_list_accessible_accounts.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_accessible_accounts_continue
+    ref: artifacts/workflows/google_ads_read_list_accessible_accounts_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_ad_groups
+    ref: artifacts/workflows/google_ads_read_list_ad_groups.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_ad_groups_continue
+    ref: artifacts/workflows/google_ads_read_list_ad_groups_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_ads
+    ref: artifacts/workflows/google_ads_read_list_ads.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_ads_ad_group
+    ref: artifacts/workflows/google_ads_read_list_ads_ad_group.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_ads_ad_group_continue
+    ref: artifacts/workflows/google_ads_read_list_ads_ad_group_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_ads_continue
+    ref: artifacts/workflows/google_ads_read_list_ads_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_campaigns
+    ref: artifacts/workflows/google_ads_read_list_campaigns.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_campaigns_continue
+    ref: artifacts/workflows/google_ads_read_list_campaigns_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_campaigns_filtered
+    ref: artifacts/workflows/google_ads_read_list_campaigns_filtered.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_campaigns_filtered_continue
+    ref: artifacts/workflows/google_ads_read_list_campaigns_filtered_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_keywords
+    ref: artifacts/workflows/google_ads_read_list_keywords.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_keywords_ad_group
+    ref: artifacts/workflows/google_ads_read_list_keywords_ad_group.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_keywords_ad_group_continue
+    ref: artifacts/workflows/google_ads_read_list_keywords_ad_group_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_keywords_continue
+    ref: artifacts/workflows/google_ads_read_list_keywords_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_manager_clients
+    ref: artifacts/workflows/google_ads_read_list_manager_clients.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_manager_clients_continue
+    ref: artifacts/workflows/google_ads_read_list_manager_clients_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_targeting
+    ref: artifacts/workflows/google_ads_read_list_targeting.yaml
+    publish: true
+  - workflow_id: google_ads_read_list_targeting_continue
+    ref: artifacts/workflows/google_ads_read_list_targeting_continue.yaml
+    publish: true
+  - workflow_id: google_ads_read_validate_search_campaign
+    ref: artifacts/workflows/google_ads_read_validate_search_campaign.yaml
+    publish: true
+  - workflow_id: google_ads_targeting_with_approval
+    ref: artifacts/workflows/google_ads_targeting_with_approval.yaml
+    publish: true
   - workflow_id: google_ads_two_client_reports
     ref: artifacts/workflows/google_ads_two_client_reports.yaml
     publish: true

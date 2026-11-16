@@ -11,7 +11,7 @@ Target Pro0.9.18 commit `54a43366bf404d31c163c269af639de789b9dce6`; host1.9.0; S
 | G4/G5 | Native Setup/Help and ordinary resource-name/action inputs; no mandatory dependent selectors or custom React UI. |
 | Writes | Named actions/Extension tools with trusted host external_effect_id;13 declared effects, Test Run suppression, one atomic batch, no automatic write retry. Host owns dedup/recovery. |
 | Agent discovery | Contract v2 grounding advertises workflow operations. This is distinct from executable direct tools. |
-| Direct read tools | Pro's raw `invoke_manifest_tool` path calls `run_extension_invocation` without the named-action connection/OAuth hydration. Public SDK has no independent OAuth token resolver for this path. No direct tools are exported until the gap is resolved. Callable-workflow alternative is pending product disposition. |
+| Direct read tools | Pro's raw `invoke_manifest_tool` path calls `run_extension_invocation` without the named-action connection/OAuth hydration. Public SDK has no independent OAuth token resolver for this path. No direct raw tools are exported. The user accepted callable read/validate/report workflows for V1; those use named actions with ordinary project connection slots. Installed execution evidence remains pending. |
 | Read retries | Up to3 attempts within one shared deadline; Retry-After respected; permanent quota/policy/precision/access failures are not retried. |
 | Portable wheels |11 hash-locked packages, CPython3.12 Linux AMD64 and ARM64 wheel coverage. Architecture coverage is not installed verification on both architectures. |
 
@@ -32,3 +32,5 @@ All references below are fixed to the target commit, not a moving branch:
 - [Contract v2 workflow grounding](https://github.com/Flow-Steward/flow-steward-app/blob/54a43366bf404d31c163c269af639de789b9dce6/core/application/extensions/extension_projection_v2.py)
 - [Existing config mutation/CAS](https://github.com/Flow-Steward/flow-steward-app/blob/54a43366bf404d31c163c269af639de789b9dce6/core/application/extensions/connection_config_mutation.py)
 - [Project connection slots](https://github.com/Flow-Steward/flow-steward-app/blob/54a43366bf404d31c163c269af639de789b9dce6/core/application/workflows/workflow_connection_slots.py)
+
+Read workflow wrappers have explicit initial/continuation and scope/filter variants so absent optional inputs are not mapped to null. The targeting approval workflow verifies supplied retained expected state against a fresh complete read, computes/saves the exact managed diff using the existing Template step, then submits the same retained input after approval. It refuses an incomplete single-page snapshot. No preview action or JSON parser service was introduced.

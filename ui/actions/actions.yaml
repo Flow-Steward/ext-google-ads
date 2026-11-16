@@ -43,7 +43,7 @@ actions:
   handler:
     mode: extension
   mutates_platform: false
-  workflow_visible: false
+  workflow_visible: true
   parameters:
   - name: page_size
     type: integer
@@ -86,7 +86,7 @@ actions:
   handler:
     mode: extension
   mutates_platform: false
-  workflow_visible: false
+  workflow_visible: true
   parameters:
   - name: manager_id
     type: string

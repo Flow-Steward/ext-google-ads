@@ -14,7 +14,9 @@ components:
   title: Configure the advertising account
   description: Authorize first, select that connection, save customer/MCC, then check
     it. Save without a selected row may create an unfinished connection; it cannot
-    run Ads actions until OAuth and account setup are complete.
+    run Ads actions until OAuth and account setup are complete. Discovery buttons
+    use the selected authorized connection; discovery-only fields are not saved into
+    account configuration.
   fields:
   - field_id: customer_id
     path: customer_id
@@ -26,6 +28,21 @@ components:
     label: Manager ID (omit for direct access)
     widget: text
     required: false
+  - field_id: manager_id
+    path: manager_id
+    label: Manager ID to inspect (discovery only)
+    widget: text
+    required: false
+  - field_id: page_size
+    path: page_size
+    label: Discovery page size (optional, maximum 1000)
+    widget: number
+    required: false
+  - field_id: cursor
+    path: cursor
+    label: Discovery continuation cursor (optional)
+    widget: text
+    required: false
   data:
     connection_type: google_ads_account
     config_fields:
@@ -33,6 +50,14 @@ components:
     - login_customer_id
     secret_fields: []
     test_action: bind_ads_account
+  ui_schema:
+    actions:
+      accessible:
+        action_id: list_accessible_accounts
+        label: List directly accessible accounts
+      clients:
+        action_id: list_manager_clients
+        label: Inspect manager clients
 - component_id: compatibility_notes
   type: markdown
   title: Connection setup

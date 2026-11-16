@@ -1,0 +1,291 @@
+workflow_id: google_ads_targeting_with_approval
+version: 1.0.0
+display_name: Google Ads Targeting With Approval
+description: Read current targeting, verify the retained expected state, deterministically
+  compute and save managed additions/removals, approve that exact change, then apply
+  the same retained input. Requires a complete current snapshot of at most1000 criteria;
+  refuses a cursor/truncated snapshot. No post-approval generation or provider CAS
+  promise.
+enabled: false
+trigger:
+  confidence_threshold: 0.0
+settings:
+  connection_slots:
+  - slot: client
+    extension_id: flowsteward.google-ads
+    connection_type_ids:
+    - google_ads_account
+    label: Client
+  execution_graph:
+    schema_version: 1
+    entry:
+      kind: step
+      id: save_inputs
+    edges:
+    - source:
+        kind: step
+        id: save_inputs
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: read_current
+      rework: false
+    - source:
+        kind: step
+        id: read_current
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: prepare_review
+      rework: false
+    - source:
+        kind: step
+        id: prepare_review
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: approve_targeting
+      rework: false
+    - source:
+        kind: step
+        id: approve_targeting
+      outcome:
+        name: approved
+      target:
+        kind: step
+        id: apply_targeting
+      rework: false
+    - source:
+        kind: step
+        id: approve_targeting
+      outcome:
+        name: rejected
+      target:
+        kind: step
+        id: rejected
+      rework: false
+    - source:
+        kind: step
+        id: apply_targeting
+      outcome:
+        name: success
+      target:
+        kind: step
+        id: done
+      rework: false
+  policies:
+    branch_strategy: none
+  callable:
+    enabled: true
+    trigger_channels:
+    - ui
+    - api
+    - mcp
+    - parent_workflow
+    input_mode: fields
+    strict_inputs: true
+    expected_inputs:
+    - name: targeting_input
+      type: object
+      required: true
+      description: Complete set_campaign_targeting input with customer/MCC assertions
+        and supplied expected/desired managed families; expected is verified against
+        a fresh read before approval.
+    output_mode: variables
+    expected_outputs:
+    - name: targeting_result
+      type: object
+      required: false
+      description: Actual post-write managed targeting state.
+    expected_artifacts: []
+    side_effects:
+    - external_write
+builder_metadata_jsonb:
+  purpose: Read current targeting, verify the retained expected state, deterministically
+    compute and save managed additions/removals, approve that exact change, then apply
+    the same retained input. Requires a complete current snapshot of at most1000 criteria;
+    refuses a cursor/truncated snapshot. No post-approval generation or provider CAS
+    promise.
+  use_cases:
+  - Google Ads agency workflows
+  anti_use_cases:
+  - Bypass project OAuth or host external-effect authorization
+  composition_role: ads_workflow
+  determinism_level: external_api
+  safe_for_auto_use: false
+tags:
+- google-ads
+- agency
+steps:
+- step_id: save_inputs
+  display_name: Save exact targeting expected/desired input
+  step_kind: set_variable
+  override:
+    set_variable:
+      assignments:
+        state.ads_targeting_input:
+          source: state.inputs.targeting_input
+- step_id: read_current
+  display_name: List targeting
+  step_kind: connector
+  connector_id: extension.flowsteward.google-ads
+  connection_binding_jsonb:
+    slot: client
+  override:
+    connector:
+      extension_id: flowsteward.google-ads
+      operation_id: list_targeting
+      action_id: list_targeting
+  input_mapping_jsonb:
+    campaign: state.ads_targeting_input.campaign_resource_name
+    page_size: literal:1000
+  output_mapping_jsonb:
+    result: state.targeting_snapshot
+- step_id: prepare_review
+  display_name: Verify fresh expected state and save exact additions/removals
+  step_kind: template
+  override:
+    template:
+      format: text
+      text: '{%- if snapshot.truncated or snapshot.next_cursor -%}{{ complete_targeting_snapshot_required
+        }}{%- endif -%}
+
+        {%- if snapshot.customer_id != request.expected_customer_id or snapshot.campaign
+        != request.campaign_resource_name -%}{{ matching_targeting_customer_required
+        }}{%- endif -%}
+
+        {%- if request.expected_current|list|sort != request.desired|list|sort -%}{{
+        matching_targeting_families_required }}{%- endif -%}
+
+        {%- set ns = namespace(expected={}, intervals=[], additions=[], removals=[],
+        location_changes=[]) -%}
+
+        {%- set old_geo = snapshot[''items'']|selectattr(''kind'',''equalto'',''geo'')|rejectattr(''negative'')|map(attribute=''geo_target_constant'')|list|sort
+        -%}
+
+        {%- for item in snapshot[''items''] if item.kind == ''ad_schedule'' -%}
+
+        {%- set ns.intervals = ns.intervals + [dict(day=item.day,start_hour=item.start_hour,start_minute=item.start_minute,end_hour=item.end_hour,end_minute=item.end_minute)]
+        -%}
+
+        {%- endfor -%}
+
+        {%- set old_intervals = ns.intervals|sort(attribute=''day,start_hour,start_minute,end_hour,end_minute'')
+        -%}
+
+        {%- if ''geo_target_constants'' in request.desired -%}
+
+        {%- if old_geo != request.expected_current.geo_target_constants|sort -%}{{
+        fresh_expected_geo_required }}{%- endif -%}
+
+        {%- set ns.expected = dict(ns.expected,geo_target_constants=old_geo) -%}
+
+        {%- for value in request.desired.geo_target_constants|sort if value not in
+        old_geo -%}{%- set ns.additions=ns.additions+[dict(family=''GEO'',value=value)]
+        -%}{%- endfor -%}
+
+        {%- for value in old_geo if value not in request.desired.geo_target_constants
+        -%}{%- set ns.removals=ns.removals+[dict(family=''GEO'',value=value)] -%}{%-
+        endfor -%}
+
+        {%- endif -%}
+
+        {%- if ''schedule'' in request.desired -%}
+
+        {%- set old_schedule = dict(mode=''weekly'',intervals=old_intervals) if old_intervals
+        else dict(mode=''all_time'') -%}
+
+        {%- set expected_intervals = request.expected_current.schedule.intervals|default([])|sort(attribute=''day,start_hour,start_minute,end_hour,end_minute'')
+        -%}
+
+        {%- if old_schedule.mode != request.expected_current.schedule.mode or old_intervals
+        != expected_intervals -%}{{ fresh_expected_schedule_required }}{%- endif -%}
+
+        {%- set ns.expected = dict(ns.expected,schedule=old_schedule) -%}
+
+        {%- set new_intervals = request.desired.schedule.intervals if request.desired.schedule.mode
+        == ''weekly'' else [] -%}
+
+        {%- for value in new_intervals if value not in old_intervals -%}{%- set ns.additions=ns.additions+[dict(family=''SCHEDULE'',value=value)]
+        -%}{%- endfor -%}
+
+        {%- for value in old_intervals if value not in new_intervals -%}{%- set ns.removals=ns.removals+[dict(family=''SCHEDULE'',value=value)]
+        -%}{%- endfor -%}
+
+        {%- endif -%}
+
+        {%- if ''location_options'' in request.desired -%}
+
+        {%- if snapshot.location_options != request.expected_current.location_options
+        -%}{{ fresh_expected_location_options_required }}{%- endif -%}
+
+        {%- set ns.expected = dict(ns.expected,location_options=snapshot.location_options)
+        -%}
+
+        {%- for field in [''positive_geo_target_type'',''negative_geo_target_type'']
+        if snapshot.location_options[field] != request.desired.location_options[field]
+        -%}
+
+        {%- set ns.location_changes=ns.location_changes+[dict(field=field,previous=snapshot.location_options[field],desired=request.desired.location_options[field])]
+        -%}
+
+        {%- endfor -%}
+
+        {%- endif -%}
+
+        {{ dict(customer_id=snapshot.customer_id,connection_id=snapshot.connection_id,campaign=request.campaign_resource_name,expected_current=ns.expected,desired=request.desired,additions=ns.additions,removals=ns.removals,location_changes=ns.location_changes,write_input=request,preflight_is_provider_cas=false)|tojson
+        }}'
+      inputs:
+      - name: request
+        type: object
+        required: true
+        source: state.ads_targeting_input
+      - name: snapshot
+        type: object
+        required: true
+        source: state.targeting_snapshot
+      result_target: state.targeting_review
+- step_id: approve_targeting
+  display_name: Review customer and exact saved inputs
+  step_kind: approval
+  override:
+    approval:
+      show_outputs:
+      - state.ads_targeting_input
+      - state.targeting_review
+- step_id: apply_targeting
+  display_name: Set campaign targeting
+  step_kind: connector
+  connector_id: extension.flowsteward.google-ads
+  connection_binding_jsonb:
+    slot: client
+  override:
+    connector:
+      extension_id: flowsteward.google-ads
+      operation_id: set_campaign_targeting
+      action_id: set_campaign_targeting
+  input_mapping_jsonb:
+    expected_customer_id: state.ads_targeting_input.expected_customer_id
+    expected_login_customer_id: state.ads_targeting_input.expected_login_customer_id
+    campaign_resource_name: state.ads_targeting_input.campaign_resource_name
+    expected_current: state.ads_targeting_input.expected_current
+    desired: state.ads_targeting_input.desired
+  output_mapping_jsonb:
+    result: state.targeting_result
+- step_id: done
+  display_name: Complete
+  step_kind: stop_success
+  override:
+    stop_success:
+      message: Google Ads workflow completed; inspect actual statuses and delivery
+        constraints.
+- step_id: rejected
+  display_name: Stopped
+  step_kind: stop_fail
+  override:
+    stop_fail:
+      message: Operator rejected this change.
+groups: []

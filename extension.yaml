@@ -4,13 +4,66 @@ lifecycle:
   data_migrations: []
 extension_id: flowsteward.google-ads
 kind: tool_provider
-version: 1.0.0
+version: 1.0.1
 runtime:
   contract_version: extension_host_v2
   compatibility:
     platform_min: 1.9.0
   extension_contract_v2:
-    oauth_providers: contracts/oauth_providers.yaml
+    oauth_providers:
+    - provider_id: google_ads_oauth
+      display_name: Google Ads
+      description: Project-scoped Google OAuth application; one grant per connection.
+      setup_page_id: setup
+      help_page_id: setup
+      flow:
+        type: authorization_code
+        pkce: s256
+      credential_fields:
+      - field_id: client_id
+        value_type: text
+        required: true
+        secret: false
+        browser_exposable: true
+        change_policy: reauthorization_required
+        label: Google OAuth Client ID
+        help_text: Use the Web application OAuth client from the API-enabled Cloud project.
+        autocomplete: username
+        validation:
+          min_length: 1
+          max_length: 512
+      - field_id: client_secret
+        value_type: secret
+        required: true
+        secret: true
+        change_policy: runtime_revalidate
+        label: Google OAuth Client Secret
+        help_text: Use the client secret matching this project configuration.
+        autocomplete: current-password
+        validation:
+          min_length: 1
+          max_length: 4096
+      authorization_endpoint:
+        url: https://accounts.google.com/o/oauth2/v2/auth
+      token_endpoint:
+        url: https://oauth2.googleapis.com/token
+        client_auth_method: client_secret_post
+      revocation_endpoint:
+        url: https://oauth2.googleapis.com/revoke
+      callback_id: oauth_authorization
+      authorization_intents:
+      - intent_id: connect
+        static_parameters:
+          access_type: offline
+          include_granted_scopes: false
+          prompt: consent select_account
+        user_inputs:
+        - input_id: email_hint
+          parameter: login_hint
+          validation:
+            type: email
+            max_length: 320
+      post_connect_action_id: verify_google_identity
     connection_types: contracts/connection_types.yaml
     operation_manifest: contracts/operation_manifest.yaml
     step_ui_manifest: contracts/step_ui_manifest.yaml

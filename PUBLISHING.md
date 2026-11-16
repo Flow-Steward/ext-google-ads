@@ -32,3 +32,5 @@ PYTHONPATH=/app python /authoring/flowsteward_google_ads/tests/host_checks/verif
 ```
 
 This check uses core only as the external test harness. It validates the artifact descriptor and merged runtime contract, including OAuth release fingerprints, the account connection, all 26 actions and 28 workflow artifacts. Run it on the extracted archive as well; public manifest validation alone does not exercise this install boundary.
+
+Flow Steward 0.9.18 OAuth services recompile the raw provider declarations from the installed manifest. Declare `runtime.extension_contract_v2.oauth_providers` as an inline list in `extension.yaml`; a file ref compiles for UI but yields no providers in the installed OAuth services. The host check must exercise `compile_oauth_providers` on both the compiled manifest and the merged descriptor.

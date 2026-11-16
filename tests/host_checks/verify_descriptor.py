@@ -9,6 +9,8 @@ def main():
     from core.application.extensions.lifecycle import validate_extension_descriptor_file
     from core.application.extensions.extension_contract_v2 import validate_extension_contract_v2
     from core.application.extensions.oauth_release_upgrade import resolve_oauth_release_contract
+    from core.application.extensions.oauth_contract import compile_oauth_providers
+    from core.infrastructure.extension_runtime.extension_runtime import compile_extension_bundle
 
     root = Path(__file__).resolve().parents[2]
     descriptor = root / "extension-descriptor.yaml"
@@ -19,6 +21,11 @@ def main():
         normalized_descriptor=validated["normalized"],
     )
     assert not errors, errors
+    compiled = compile_extension_bundle(root, logical_bundle_dir_name="flowsteward_google_ads")
+    assert compiled["status"] == "valid", compiled
+    for contract in (persisted, compiled["compiled_manifest"]):
+        # Installed OAuth services compile raw provider declarations, not file refs.
+        assert [p.provider_id for p in compile_oauth_providers(contract)] == ["google_ads_oauth"]
     runtime_contract = validate_extension_contract_v2(persisted, bundle_root=root)
     assert runtime_contract["valid"], runtime_contract.get("errors")
     assert [

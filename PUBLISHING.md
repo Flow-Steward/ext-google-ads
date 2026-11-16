@@ -1,6 +1,6 @@
 # Build and validation
 
-Use the exact Pro0.9.18 target checkout and its disposable `fs-audit` Docker runtime. Run focused regression tests through:
+Use the exact Flow Steward 0.9.18 target checkout and its disposable `fs-audit` Docker runtime. Run focused regression tests through:
 
 ```sh
 ./core/entrypoints/cli/scripts/lint.sh --checks extension-static,extension-tests --extension-root /absolute/path/to/ext-google-ads --test-paths tests --evidence-mode off

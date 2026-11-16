@@ -1,6 +1,6 @@
 # Acceptance evidence boundaries
 
-This matrix tracks revision6 AC01–AC24. **No AC requiring installed, browser or live evidence is marked passed by local tests.** Final fix-pass synthetic suite:238 passed under the exact Pro0.9.18 Docker extension gate; compile/ruff/mypy/Bandit and manifest/UI/schema validation passed after the single final review fix pass. The fresh review inspected de93544; its material findings were fixed with regression evidence, and the user-approved callable read alternative was added afterward. Final committed-state evidence is delivered separately with the extension SHA and bundle hashes.
+This matrix tracks revision6 AC01–AC24. **No AC requiring installed, browser or live evidence is marked passed by local tests.** Final fix-pass synthetic suite:238 passed under the exact Flow Steward 0.9.18 Docker extension gate; compile/ruff/mypy/Bandit and manifest/UI/schema validation passed after the single final review fix pass. The fresh review inspected de93544; its material findings were fixed with regression evidence, and the user-approved callable read alternative was added afterward. Final committed-state evidence is delivered separately with the extension SHA and bundle hashes.
 
 | ID | Local evidence | Remaining acceptance |
 | --- | --- | --- |

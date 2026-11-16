@@ -1,6 +1,6 @@
 # Google Ads for Flow Steward
 
-Separate out-of-process extension for **Pro 0.9.18** (`54a43366bf404d31c163c269af639de789b9dce6`), host contract **1.9.0**, public SDK **0.5.0**, Google Ads REST **v26**. Implements the approved revision 6 Search scope: **26 named operations and 13 external effects**. No core patch is included.
+Separate out-of-process extension for **Flow Steward 0.9.18** (`54a43366bf404d31c163c269af639de789b9dce6`), host contract **1.9.0**, public SDK **0.5.0**, Google Ads REST **v26**. Implements the approved revision 6 Search scope: **26 named operations and 13 external effects**. No core patch is included.
 
 This is a development candidate. Local provider-contract tests and compiler checks do not establish installed/browser/live acceptance. See [COMPATIBILITY.md](COMPATIBILITY.md) and [ACCEPTANCE.md](ACCEPTANCE.md) for release prerequisites.
 

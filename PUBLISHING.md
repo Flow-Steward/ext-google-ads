@@ -21,7 +21,7 @@ Run from this repository root in the authoring container. Each locked dependency
 
 Build only from a **clean staging directory** populated from a verified committed tree. The target bundler does not exclude this repository's `.git`, authoring logs or previous distributions automatically; never point it directly at the developer checkout. Include committed runtime wheels; omit authoring-only dev wheels and evidence logs. Then run public `extensions validate` and `extensions bundle` against the staging parent. Keep archives below50MiB compressed/150MiB uncompressed and record SHA256. Bundling is not installation or publication, and no production advertising is authorized by these checks.
 
-Before release, complete the pending installed/browser/live acceptance in ACCEPTANCE.md, validate the approved callable agent-read workflows on the installed host, verify the actual G3 limits and review the final committed state. Any live write needs a deliberately authorized test account/action path; fake-provider tests must remain labelled synthetic.
+The user authorized a public unverified catalog release on 2026-11-24. Preserve the pending installed/browser/live acceptance in ACCEPTANCE.md. Selecting a tested/Verified release requires the approved callable agent-read workflows on the installed host and actual G3 limits. Review the final committed state. Any live write needs a deliberately authorized test account/action path; fake-provider tests must remain labelled synthetic.
 
 The archive installer also validates `extension-descriptor.yaml` before merging the executable bundle. Its strict artifact schema cannot declare OAuth callbacks. Keep the executable OAuth contract in `extension.yaml`; omit `runtime.extension_contract_v2` from the artifact descriptor so the standard bundle import inherits the complete contract. Duplicating its OAuth refs there makes installation fail before the merge.
 
@@ -34,3 +34,7 @@ PYTHONPATH=/app python /authoring/flowsteward_google_ads/tests/host_checks/verif
 This check uses core only as the external test harness. It validates the artifact descriptor and merged runtime contract, including OAuth release fingerprints, the account connection, all 26 actions and 28 workflow artifacts. Run it on the extracted archive as well; public manifest validation alone does not exercise this install boundary.
 
 Flow Steward 0.9.18 OAuth services recompile the raw provider declarations from the installed manifest. Declare `runtime.extension_contract_v2.oauth_providers` as an inline list in `extension.yaml`; a file ref compiles for UI but yields no providers in the installed OAuth services. The host check must exercise `compile_oauth_providers` on both the compiled manifest and the merged descriptor.
+
+## Public catalog release
+
+The maintained repository is https://github.com/Flow-Steward/ext-google-ads. CI and release use immutable shared catalog workflows, with Linux AMD64 and ARM64 archives and a declared, focused metadata/entrypoint test selection. SDK 0.5.0 comes from the retained hash-locked public wheel. Tag v1.0.2 only after CI and source/history/branding review; do not replace release assets. Register using the catalog-owned register-extension.yml workflow and verify the exact delivered ID, version, archive hashes and icon. Full, heavy and live acceptance are not implied by publication.

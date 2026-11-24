@@ -1,0 +1,19 @@
+page_id: support
+title: Support
+project_scoped: false
+components:
+- component_id: support_contact
+  type: markdown
+  body: |
+    Maintained by Flow Steward. This integration is not authored, certified or endorsed by Google.
+
+    - [Report a problem or ask a question](https://github.com/Flow-Steward/ext-google-ads/issues/new/choose)
+    - [Browse existing issues](https://github.com/Flow-Steward/ext-google-ads/issues)
+
+    Include the extension and Flow Steward versions, reproduction steps, expected behavior and the actual error.
+    Issues are public: do not post OAuth credentials, access or refresh tokens, customer data or unredacted reports.
+
+    Live OAuth, multiple-account isolation and advertising workflow acceptance are pending.
+    New campaign, group and ad resources are created PAUSED. Review approval steps before enabling delivery.
+
+    Google Ads and its logo are trademarks of Google LLC.

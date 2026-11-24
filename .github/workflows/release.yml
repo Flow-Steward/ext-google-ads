@@ -1,0 +1,19 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing immutable release tag
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  release:
+    permissions:
+      contents: write
+    uses: Flow-Steward/extensions/.github/workflows/release-extension.yml@55ccd6f125d073f0f009595c52f77d504ac62b05
+    with:
+      tag: ${{ inputs.tag || github.ref_name }}

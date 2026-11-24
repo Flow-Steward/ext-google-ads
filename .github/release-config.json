@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "extension_id": "flowsteward.google-ads",
+  "runtime_targets": [
+    "linux-amd64",
+    "linux-arm64"
+  ],
+  "test_requirements": [
+    ".github/requirements-test.txt"
+  ],
+  "test_paths": [
+    "tests/test_bundle_contract.py",
+    "tests/test_entrypoint.py"
+  ],
+  "package_script": ".github/scripts/package_extension.py",
+  "additional_assets": [
+    "RELEASE-NOTES.md"
+  ],
+  "notes_file": "RELEASE-NOTES.md"
+}

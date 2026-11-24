@@ -1,0 +1,16 @@
+name: Report a problem
+description: Report a Google Ads extension problem without sharing credentials or customer data.
+body:
+- type: input
+  id: versions
+  attributes:
+    label: Extension and Flow Steward versions
+  validations:
+    required: true
+- type: textarea
+  id: reproduction
+  attributes:
+    label: Steps, expected behavior and actual result
+    description: Never include OAuth secrets, tokens, customer data or unredacted reports.
+  validations:
+    required: true

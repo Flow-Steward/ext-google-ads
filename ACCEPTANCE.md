@@ -22,7 +22,7 @@ This matrix tracks revision6 AC01–AC24. **No AC requiring installed, browser o
 | AC16 | Provider enum taxonomy, quota/rate/retry/cursor/policy fixtures | Live access/revocation responses |
 | AC17 | Native metadata compiler/UI checks | Entire browser acceptance pending |
 | AC18 | 26 IDs/13 effects/schema examples/IO parity; no private runtime imports | Callable-workflow alternative accepted; installed agent path pending |
-| AC19 | Official artwork and both-architecture hashed wheels; compiler checks | Clean bundle plus standard installation pending |
+| AC19 | Official artwork and both-architecture hashed wheels; compiler checks | Version 1.0.1 standard installation and runtime health observed; public archive validation tracked separately |
 | AC20 | Synthetic tests explicitly labelled | Entire authorized test-account live acceptance pending |
 | AC21 | G2/revoke documented, connection-bound adapter | Real same-subject refresh/revoke across projects |
 | AC22 | Closed schemas, omission/empty/default/masks/identity/reset fixtures | Browser/workflow mappings on installed host |
@@ -64,6 +64,6 @@ Every operation also has a closed input/result/response schema and synthetic exa
 
 ## Required environment for completion
 
-The environment owner supplies an API-enabled Cloud project, OAuth Web client/callback, permitted Google user, separate test MCC and test client with suitable roles. Test client hierarchy must be appropriate for Google's test accounts. Installation, OAuth browser flows and live Ads writes have not been performed by this development task. Production serving/spend is not an acceptance requirement and has not been authorized.
+The environment owner supplies an API-enabled Cloud project, OAuth Web client/callback, permitted Google user, separate test MCC and test client with suitable roles. Test client hierarchy must be appropriate for Google's test accounts. On 2026-11-16, version 1.0.1 was installed on an authorized Flow Steward 0.9.18 instance and observed active and Healthy. Its native OAuth configuration form loaded and callback registration succeeded. No OAuth credentials or consent, connected Ads operations, live writes or workflow execution were completed. These observations do not establish live acceptance. Production serving/spend is not an acceptance requirement and has not been authorized.
 
-Before release, validate the approved callable agent-read path described in COMPATIBILITY.md and verify actual installed G3 stdout/result/HTTP/caller limits. Accepted G2 remains a documented residual risk, not a promise that concurrent Save/refresh is safe.
+The public catalog release is unverified. Complete the approved callable agent-read path described in COMPATIBILITY.md and actual installed G3 stdout/result/HTTP/caller-limit acceptance before selecting a tested/Verified release. Accepted G2 remains a documented residual risk, not a promise that concurrent Save/refresh is safe.

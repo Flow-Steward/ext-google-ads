@@ -2,7 +2,7 @@
 
 Separate out-of-process extension for **Flow Steward 0.9.18** (`54a43366bf404d31c163c269af639de789b9dce6`), host contract **1.9.0**, public SDK **0.5.0**, Google Ads REST **v26**. Implements the approved revision 6 Search scope: **26 named operations and 13 external effects**. No core patch is included.
 
-This is a development candidate. Local provider-contract tests and compiler checks do not establish installed/browser/live acceptance. See [COMPATIBILITY.md](COMPATIBILITY.md) and [ACCEPTANCE.md](ACCEPTANCE.md) for release prerequisites.
+Published as an unverified integration maintained by Flow Steward, without Google endorsement. Installation/runtime health and the OAuth setup form were checked on Flow Steward 0.9.18; OAuth consent, connected-account operations and live workflows remain unverified. See [COMPATIBILITY.md](COMPATIBILITY.md), [ACCEPTANCE.md](ACCEPTANCE.md) and [RELEASE-NOTES.md](RELEASE-NOTES.md).
 
 ## Connect an agency client
 
@@ -44,3 +44,7 @@ Resolve Cloud-project production-access errors in Google Cloud/Ads access settin
 See [PUBLISHING.md](PUBLISHING.md) for exact-target Docker gates, offline wheels and clean-stage packaging. [BRANDING.md](BRANDING.md) records the unchanged official Google asset source. Synthetic envelope examples deliberately omit access tokens and do not confer host authority.
 
 Russian locale currently translates some headings; operation names and several labels/help paragraphs use English fallback. Full Russian localization remains deferred.
+
+## Support
+
+[Report a problem or ask a question](https://github.com/Flow-Steward/ext-google-ads/issues/new/choose), or [browse existing issues](https://github.com/Flow-Steward/ext-google-ads/issues). Do not include credentials, tokens or customer data. Google Ads and its logo are trademarks of Google LLC.

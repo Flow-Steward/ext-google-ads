@@ -4,7 +4,7 @@ lifecycle:
   data_migrations: []
 extension_id: flowsteward.google-ads
 kind: tool_provider
-version: 1.0.1
+version: 1.0.2
 runtime:
   contract_version: extension_host_v2
   compatibility:
@@ -68,9 +68,14 @@ runtime:
     operation_manifest: contracts/operation_manifest.yaml
     step_ui_manifest: contracts/step_ui_manifest.yaml
 display_name: Google Ads
-description: Search advertising across project connections.
+description: >-
+  Create paused Search campaigns, manage ads and targeting, and read performance
+  reports across project-scoped Google Ads accounts. Maintained by Flow Steward;
+  live OAuth and advertising workflow acceptance is pending.
 vendor:
   name: Flow Steward
+  support_url: https://github.com/Flow-Steward/ext-google-ads/issues
+  website_url: https://github.com/Flow-Steward/ext-google-ads
 listing:
   category: marketing
   tags:
@@ -78,7 +83,10 @@ listing:
   - advertising
   - search
   - agencies
-  summary: Search advertising across project connections.
+  summary: Manage Search campaigns and reports across agency client accounts.
+  setup_summary: >-
+    Configure your Google Cloud OAuth Web client, authorize each project connection,
+    and select the customer and optional manager account. Live acceptance is pending.
 features:
 - tool
 - action

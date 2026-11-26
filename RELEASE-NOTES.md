@@ -1,12 +1,13 @@
-# Google Ads 1.0.3
+# Google Ads 1.0.4
 
-Updated the offline Python runtime dependencies in both Linux AMD64 and ARM64 packages:
+- Connecting a Google Ads account now completes. The connection asks Google for
+  `openid`, `https://www.googleapis.com/auth/userinfo.email` and
+  `https://www.googleapis.com/auth/adwords`, the same names Google returns when you approve
+  access, so Flow Steward accepts the authorization.
+- A test checks that every required scope is written the way Google grants it.
 
-- cffi 2.1.1
-- cryptography 50.0.2
-- pycparser 3.12
-- rpds-py 2026.9.1
+On the Google consent screen, keep the Google Ads box ticked: the connection needs it.
 
 The catalog release remains unverified. See ACCEPTANCE.md and COMPATIBILITY.md for the installed and live acceptance status.
 
-[Changes since v1.0.2](https://github.com/Flow-Steward/ext-google-ads/compare/v1.0.2...v1.0.3)
+[Changes since v1.0.3](https://github.com/Flow-Steward/ext-google-ads/compare/v1.0.3...v1.0.4)

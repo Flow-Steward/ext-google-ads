@@ -3,7 +3,7 @@ lifecycle:
   data_schema_version: 1
   data_migrations: []
 extension_id: flowsteward.google-ads
-release_version: 1.0.2
+release_version: 1.0.3
 extension_type: service_extension
 identity:
   display_name: Google Ads

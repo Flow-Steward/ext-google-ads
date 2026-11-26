@@ -1,15 +1,12 @@
-# Google Ads 1.0.2
+# Google Ads 1.0.3
 
-First public catalog release of the Flow Steward Google Ads integration.
+Updated the offline Python runtime dependencies in both Linux AMD64 and ARM64 packages:
 
-- 26 named operations for Search campaigns, ad groups, responsive search ads, keywords, targeting and reports.
-- Project-scoped OAuth connections and optional manager routing for agency client accounts.
-- 28 workflow templates, including callable reads and explicit approval flows. New campaign, group and ad resources are PAUSED.
-- Native setup, global Support page, issue templates and separate Linux AMD64/ARM64 packages.
-- Includes the installation metadata and inline OAuth-provider fixes exercised on Flow Steward 0.9.18.
+- cffi 2.1.1
+- cryptography 50.0.2
+- pycparser 3.12
+- rpds-py 2026.9.1
 
-Installed 1.0.1 was observed active and Healthy; its OAuth configuration form and callback registration loaded. OAuth consent, real multi-account isolation, installed callable workflows, live writes and refresh/revoke acceptance remain pending. This release is unverified in the catalog. See ACCEPTANCE.md and COMPATIBILITY.md.
+The catalog release remains unverified. See ACCEPTANCE.md and COMPATIBILITY.md for the installed and live acceptance status.
 
-G2 remains: concurrent configuration Save/OAuth refresh can require reconnection. Revoking a shared Google grant may affect other connections for that Google user and Cloud project.
-
-Maintained by Flow Steward; not an official Google product. No core changes.
+[Changes since v1.0.2](https://github.com/Flow-Steward/ext-google-ads/compare/v1.0.2...v1.0.3)

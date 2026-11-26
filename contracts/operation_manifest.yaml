@@ -8,7 +8,7 @@ operations:
   - google_ads_account
   required_oauth_scopes:
   - openid
-  - email
+  - https://www.googleapis.com/auth/userinfo.email
   - https://www.googleapis.com/auth/adwords
   category: advertising
   inputs: []

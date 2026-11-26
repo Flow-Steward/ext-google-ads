@@ -4,7 +4,7 @@ lifecycle:
   data_migrations: []
 extension_id: flowsteward.google-ads
 kind: tool_provider
-version: 1.0.3
+version: 1.0.4
 runtime:
   contract_version: extension_host_v2
   compatibility:

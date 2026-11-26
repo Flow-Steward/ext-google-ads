@@ -4,7 +4,7 @@ lifecycle:
   data_migrations: []
 extension_id: flowsteward.google-ads
 kind: tool_provider
-version: 1.0.2
+version: 1.0.3
 runtime:
   contract_version: extension_host_v2
   compatibility:
@@ -121,15 +121,15 @@ python_requirements:
   hashes:
   - sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309
 - name: cffi
-  version: 2.1.0
+  version: 2.1.1
   hashes:
-  - sha256:1e9f50d192a3e525b15a75ab5114e442d83d657b7ec29182a991bc9a88fd3a66
-  - sha256:b6422532152adf4e59b110cb2808cee7a033800952f5c036b4af047ee43199e7
+  - sha256:68e62fe11f30d5ca8289242866f0a5291402d8529ca2178ab8afc5c9694ae890
+  - sha256:c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf
 - name: cryptography
-  version: 50.0.0
+  version: 50.0.2
   hashes:
-  - sha256:06a32a980526a6ab9a4b9bf8f7385800791e2bb960903cb6b530e4817509a3b7
-  - sha256:fd9192b7b70c573d7f214eb1ae35e00d359f6f5e4b27c7e21e30de1fc6204645
+  - sha256:630ebfea3bf689d075f82316324ff7433dc447fe6bc1bfc76524b74b4a9567d2
+  - sha256:79def8d059362e7831389ed3be0ecdf58a89386e1271e35dd9f5af84e81bffd0
 - name: flowsteward-extension-sdk
   version: 0.5.0
   hashes:
@@ -143,9 +143,9 @@ python_requirements:
   hashes:
   - sha256:98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe
 - name: pycparser
-  version: '3.0'
+  version: '3.12'
   hashes:
-  - sha256:b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992
+  - sha256:a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e
 - name: pyyaml
   version: 6.0.3
   hashes:
@@ -156,10 +156,10 @@ python_requirements:
   hashes:
   - sha256:381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231
 - name: rpds-py
-  version: 0.30.0
+  version: 2026.9.1
   hashes:
-  - sha256:47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23
-  - sha256:ca28829ae5f5d569bb62a79512c842a03a12576375d5ece7d2cadf8abe96ec28
+  - sha256:2693b2728bbcc48d09a981a356954b0c47c53ff25b545856f28a889ea619f69a
+  - sha256:addeda51556dac7c1a2f14cda62db8b621cd12afba3091d03a96c72932387eab
 - name: typing-extensions
   version: 4.16.0
   hashes:
